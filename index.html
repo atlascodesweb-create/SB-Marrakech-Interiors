@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#121110">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="SB Interiors Marrakech — Espace client privé de suivi de projet d'architecture d'intérieur. Maquette interactive.">
+<title>SB Interiors Marrakech — Espace Client Privé</title>
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons (CDN) -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Typographies Luxe -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Favicon & icône d'appui — logo officiel de l'agence -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        noir:   { DEFAULT:'#121110', 950:'#0C0B0A', 900:'#121110', 800:'#1A1817', 700:'#242220', 600:'#2E2B28', 500:'#3B3835' },
+        creme:  { DEFAULT:'#F5F2EB', light:'#FAF8F5', dark:'#E8E3D9' },
+        or:     { DEFAULT:'#C5A880', bright:'#D4AF37', light:'#E3CFA9', dark:'#A88B60' },
+        brun:   '#8B7355'
+      },
+      fontFamily: {
+        display: ['"Cormorant Garamond"','serif'],
+        body: ['Jost','sans-serif']
+      },
+      boxShadow: {
+        luxe: '0 24px 60px -24px rgba(18,17,16,0.35)',
+        soft: '0 10px 34px -14px rgba(18,17,16,0.16)'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  html, body { font-family:'Jost',sans-serif; background:#F5F2EB; color:#121110; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#C5A880; color:#121110; }
+
+  /* Scrollbars discrètes */
+  .no-scrollbar::-webkit-scrollbar { display:none; }
+  .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+  .thin-scroll::-webkit-scrollbar { width:5px; height:5px; }
+  .thin-scroll::-webkit-scrollbar-track { background:transparent; }
+  .thin-scroll::-webkit-scrollbar-thumb { background:rgba(197,168,128,.45); border-radius:99px; }
+
+  /* Transition entre vues */
+  @keyframes viewIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .view { animation: viewIn .45s cubic-bezier(.22,.61,.36,1) both; }
+
+  /* Anneau 360° rotatif */
+  @keyframes spin360 { to { transform:rotate(360deg); } }
+  .ring-360 { animation: spin360 18s linear infinite; }
+
+  /* Barre de progression dorée animée */
+  @keyframes shimmer { 0% { background-position:-320px 0; } 100% { background-position:calc(320px + 100%) 0; } }
+  .bar-shimmer {
+    background-image: linear-gradient(90deg,#A88B60,#D4AF37,#E3CFA9,#C5A880,#A88B60);
+    background-size: 320px 100%;
+    animation: shimmer 3.4s linear infinite;
+  }
+
+  /* Point "en cours" pulsant */
+  @keyframes pulseDot { 0% { box-shadow:0 0 0 0 rgba(197,168,128,.55); } 70% { box-shadow:0 0 0 11px rgba(197,168,128,0); } 100% { box-shadow:0 0 0 0 rgba(197,168,128,0); } }
+  .dot-current { animation: pulseDot 2.1s infinite; }
+
+  /* Indicateur "en train d'écrire" */
+  @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:.35; } 30% { transform:translateY(-4px); opacity:1; } }
+  .typing span { display:inline-block; width:5px; height:5px; border-radius:99px; background:#C5A880; margin:0 1.5px; animation:typing 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay:.15s; }
+  .typing span:nth-child(3) { animation-delay:.3s; }
+
+  /* Panorama simulé (plein écran 360°) */
+  @keyframes panorama { from { transform:scale(1.28) translateX(-4.5%); } to { transform:scale(1.28) translateX(4.5%); } }
+  .panorama { animation: panorama 20s ease-in-out infinite alternate; will-change:transform; }
+
+  /* Curseur (range) doré */
+  input[type=range] { -webkit-appearance:none; appearance:none; height:4px; border-radius:99px; outline:none;
+    background: linear-gradient(90deg, #C5A880 var(--fill,68%), #E8E3D9 var(--fill,68%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:99px;
+    background:#121110; border:3px solid #C5A880; cursor:pointer; box-shadow:0 3px 10px rgba(18,17,16,.35); }
+  input[type=range]::-moz-range-thumb { width:20px; height:20px; border-radius:99px; background:#121110; border:3px solid #C5A880; cursor:pointer; }
+
+  /* Toast */
+  #toast { transition: opacity .35s cubic-bezier(.22,.61,.36,1), transform .35s cubic-bezier(.22,.61,.36,1); }
+  .toast-hide { opacity:0; transform:translate(-50%,18px); pointer-events:none; }
+
+  /* Plans SVG */
+  .plan-svg text { font-family:'Jost',sans-serif; }
+  .plan-svg .room-label { fill:#E8E3D9; font-size:17px; letter-spacing:2.5px; font-weight:500; }
+  .plan-svg .room-dim  { fill:#C5A880; font-size:12.5px; letter-spacing:1.5px; }
+  .plan-svg .wall { stroke:#F5F2EB; stroke-width:9; fill:none; stroke-linejoin:miter; }
+  .plan-svg .wall-inner { stroke:#F5F2EB; stroke-width:4.5; fill:none; }
+  .plan-svg .terrasse { stroke:#C5A880; stroke-width:2.5; stroke-dasharray:10 7; fill:rgba(197,168,128,.07); }
+  .plan-svg .surface { fill:rgba(250,248,245,.045); }
+
+  /* Divers */
+  .card-luxe { background:#FFFFFF; border:1px solid rgba(18,17,16,.06); border-radius:1.25rem; box-shadow:0 10px 34px -14px rgba(18,17,16,.16); }
+  .pill { transition: all .25s ease; }
+  .switch-dot { transition: transform .3s cubic-bezier(.22,.61,.36,1); }
+
+  /* ── Logo officiel (logo.png · PNG transparent 1:1) — présentation raffinée ── */
+  /* Halographie : double ombre dorée qui détache le monogramme du fond sombre */
+  .logo-luxe {
+    filter: drop-shadow(0 22px 34px rgba(0,0,0,.55))
+            drop-shadow(0 0 26px rgba(197,168,128,.32))
+            drop-shadow(0 0 60px rgba(212,175,55,.14));
+  }
+  .logo-luxe-soft {
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,.45))
+            drop-shadow(0 0 12px rgba(197,168,128,.20));
+  }
+  /* Flottement imperceptible du logo — respiration visuelle */
+  @keyframes logoFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+  .logo-float { animation: logoFloat 6.5s ease-in-out infinite; will-change:transform; }
+  /* Halo radial doré derrière le logo (respiration lente, synchronisée) */
+  @keyframes haloBreath { 0%,100% { opacity:.62; transform:scale(1); } 50% { opacity:1; transform:scale(1.045); } }
+  .logo-halo { animation: haloBreath 6.5s ease-in-out infinite; }
+  /* Entrée du logo à l'ouverture de la page (opacity/transform uniquement,
+     pour ne jamais écraser les drop-shadow du .logo-luxe) */
+  @keyframes logoIn { from { opacity:0; transform:scale(.92) translateY(12px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  .logo-in { animation: logoIn 1.1s cubic-bezier(.22,.61,.36,1) both .15s; }
+</style>
+
+<script>
+/* Filet de sécurité : si une image distante échoue, on la remplace par un visuel de marque SB */
+function imgFallback(el){
+  el.onerror = null;
+  el.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+    "<svg xmlns='http://www.w3.org/2000/svg' width='900' height='700'>" +
+    "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+    "<stop offset='0' stop-color='#1A1817'/><stop offset='1' stop-color='#A88B60'/></linearGradient></defs>" +
+    "<rect width='900' height='700' fill='url(#g)'/>" +
+    "<text x='450' y='360' text-anchor='middle' font-family='Georgia,serif' font-size='130' fill='#C5A880' opacity='0.6'>SB</text>" +
+    "<text x='450' y='410' text-anchor='middle' font-family='Georgia,serif' letter-spacing='10' font-size='24' fill='#FAF8F5' opacity='0.9'>INTERIORS</text></svg>");
+}
+
+/* Filet de sécurité propre au logo : si logo.png est absent du dossier,
+   on le remplace par un monogramme SVG doré équivalent (rendu préservé). */
+const LOGO_FALLBACK = "data:image/svg+xml;utf8," + encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' width='302' height='302'>" +
+  "<text x='151' y='168' text-anchor='middle' font-family='Georgia,serif' font-size='120' fill='#C5A880' letter-spacing='4'>SB</text>" +
+  "<line x1='71' y1='208' x2='231' y2='208' stroke='#C5A880' stroke-width='2' opacity='.8'/>" +
+  "<text x='151' y='238' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='19' fill='#C5A880' letter-spacing='6'>MARRAKECH</text>" +
+  "<text x='151' y='264' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='19' fill='#C5A880' letter-spacing='6'>INTERIORS</text></svg>");
+function logoFallback(el){
+  el.onerror = null;
+  el.src = LOGO_FALLBACK;
+}
+</script>
+</head>
+
+<body class="bg-creme text-noir font-body min-h-screen">
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- VUE 1 — PAGE DE CONNEXION / ACCUEIL VITRINE                          -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<section id="view-login" class="relative min-h-screen overflow-hidden">
+  <!-- Image de fond immersive -->
+  <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1800&auto=format&fit=crop"
+       alt="Intérieur luxueux signé SB Interiors" class="absolute inset-0 w-full h-full object-cover" onerror="imgFallback(this)">
+  <div class="absolute inset-0 bg-gradient-to-b from-noir-950/85 via-noir-950/70 to-noir-950/95"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(197,168,128,0.14),transparent_65%)]"></div>
+
+  <!-- Contenu -->
+  <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-5 py-10 lg:py-16">
+    <div class="w-full max-w-md">
+
+      <!-- Badge maquette -->
+      <div class="flex justify-center mb-8">
+        <span class="inline-flex items-center gap-2 rounded-full border border-or/40 bg-noir-950/60 backdrop-blur px-4 py-1.5 text-[10px] tracking-[0.28em] uppercase text-or">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Maquette interactive · Données fictives
+        </span>
+      </div>
+
+      <!-- Logo officiel (logo.png · PNG transparent 1:1) — pièce maîtresse :
+           monogramme doré en lévitation, halo radial respirant derrière lui,
+           le fond sombre de la page fait office d'écrin -->
+      <div class="text-center mb-9">
+        <div class="logo-in relative mx-auto w-44 h-44 sm:w-48 sm:h-48">
+          <!-- Halo doré respirant (situé derrière le PNG transparent) -->
+          <div class="logo-halo absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.20),rgba(197,168,128,0.08)_45%,transparent_70%)] blur-xl"></div>
+          <!-- Flottement imperceptible -->
+          <div class="logo-float w-full h-full">
+            <img src="logo.png" alt="SB Interiors Marrakech — monogramme doré" draggable="false"
+                 class="logo-luxe relative w-full h-full object-contain" onerror="logoFallback(this)">
+          </div>
+        </div>
+        <div class="mx-auto mt-7 h-px w-24 bg-gradient-to-r from-transparent via-or/70 to-transparent"></div>
+        <p class="mt-6 text-[13px] tracking-[0.30em] uppercase text-creme/70 font-light leading-relaxed">Votre intérieur,<br>imaginé pour vous</p>
+      </div>
+
+      <!-- Formulaire de connexion -->
+      <form id="login-form" class="rounded-3xl border border-white/10 bg-noir-800/70 backdrop-blur-xl p-6 sm:p-8 shadow-luxe" novalidate>
+        <div class="space-y-4">
+          <div class="relative">
+            <i data-lucide="mail" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-or/70 pointer-events-none"></i>
+            <input id="login-email" type="email" inputmode="email" autocomplete="email" placeholder="E-mail"
+                   class="w-full h-[52px] pl-12 pr-4 py-3.5 rounded-2xl bg-white/[0.07] border border-white/15 text-creme-light placeholder-creme/35 text-[15px] focus:outline-none focus:border-or/60 focus:bg-white/10 transition">
+          </div>
+          <div class="relative">
+            <i data-lucide="lock" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-or/70 pointer-events-none"></i>
+            <input id="login-password" type="password" autocomplete="current-password" placeholder="Mot de passe"
+                   class="w-full h-[52px] pl-12 pr-12 py-3.5 rounded-2xl bg-white/[0.07] border border-white/15 text-creme-light placeholder-creme/35 text-[15px] focus:outline-none focus:border-or/60 focus:bg-white/10 transition">
+            <button type="button" onclick="togglePassword()" aria-label="Afficher le mot de passe"
+                    class="absolute right-3.5 top-1/2 -translate-y-1/2 text-creme/40 hover:text-or transition">
+              <i data-lucide="eye" class="w-5 h-5 pointer-events-none"></i>
+            </button>
+          </div>
+          <div class="flex justify-end">
+            <button type="button" onclick="toast('Un lien de réinitialisation a été envoyé (simulé).','mail')" class="text-[12px] text-creme/50 hover:text-or underline underline-offset-4 decoration-or/30 transition">Mot de passe oublié&nbsp;?</button>
+          </div>
+        </div>
+
+        <button type="submit"
+                class="mt-6 w-full h-[52px] py-3.5 rounded-2xl bg-creme-light text-noir-900 text-[13px] font-medium tracking-[0.28em] uppercase hover:bg-or transition-all duration-300 shadow-soft active:scale-[0.98]">
+          Se connecter
+        </button>
+
+        <div class="flex items-center gap-4 my-6">
+          <div class="h-px flex-1 bg-white/10"></div>
+          <span class="text-[11px] tracking-[0.3em] text-creme/40">OU</span>
+          <div class="h-px flex-1 bg-white/10"></div>
+        </div>
+
+        <button type="button" onclick="loginApple()"
+                class="w-full h-[52px] py-3.5 rounded-2xl border border-white/15 bg-white/[0.06] text-creme-light text-[13px] font-medium tracking-[0.18em] hover:border-or/50 hover:bg-white/10 transition-all duration-300 active:scale-[0.98] inline-flex items-center justify-center gap-3">
+          <svg viewBox="0 0 384 512" class="w-5 h-5 fill-current" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-36.8-2.8-77 21.3-91.7 21.3-15.5 0-51.1-20.4-79-20.4C59.1 141.2 0 184.9 0 272.5c0 25.9 4.8 52.7 14.3 80.3 12.7 36.6 45.4 109.5 79.4 108.4 18.7-.4 31.9-13.3 56.3-13.3 23.8 0 36 13.2 56.8 13.2 34.2-.5 64.1-65.5 76.3-102.2-46.7-22-38.4-74.5-37.4-88.5zM248.5 82.1c17.9-21.3 27.1-46.6 24.4-74.1-25.6 1.6-49.3 13.5-66 33.5-15.5 18.3-25.6 43.5-22.8 70.1 27.7 1.7 51-11.4 64.4-29.5z"/></svg>
+          Continuer avec Apple
+        </button>
+      </form>
+
+      <!-- Accès démo rapide -->
+      <div class="mt-7">
+        <p class="text-center text-[10px] tracking-[0.32em] uppercase text-creme/40 mb-4">Accès démo rapide</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" onclick="login('client')"
+                  class="group rounded-2xl border border-or/30 bg-noir-900/50 backdrop-blur px-4 py-3.5 hover:border-or/70 hover:bg-noir-900/80 transition-all duration-300 active:scale-[0.97]">
+            <i data-lucide="user" class="w-5 h-5 mx-auto text-or mb-1.5 group-hover:scale-110 transition-transform"></i>
+            <span class="block text-[11px] tracking-[0.14em] uppercase text-creme-light">Accès Client</span>
+            <span class="block text-[11px] text-or/80 mt-0.5">Sarah</span>
+          </button>
+          <button type="button" onclick="login('admin')"
+                  class="group rounded-2xl border border-or/30 bg-noir-900/50 backdrop-blur px-4 py-3.5 hover:border-or/70 hover:bg-noir-900/80 transition-all duration-300 active:scale-[0.97]">
+            <i data-lucide="shield" class="w-5 h-5 mx-auto text-or mb-1.5 group-hover:scale-110 transition-transform"></i>
+            <span class="block text-[11px] tracking-[0.14em] uppercase text-creme-light">Accès Admin</span>
+            <span class="block text-[11px] text-or/80 mt-0.5">Sofia B.</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="mt-10 text-center text-[11px] text-creme/35 tracking-[0.14em]">© 2026 SB Interiors Marrakech — Espace client · v2.4</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- APPLICATION (Espace connecté)                                        -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- ────────── SIDEBAR (Desktop ≥ lg) ────────── -->
+  <aside class="hidden lg:flex fixed inset-y-0 left-0 w-72 bg-noir-900 text-creme flex-col z-50 border-r border-white/5">
+    <!-- Marque -->
+    <div class="px-8 pt-9 pb-7">
+      <div class="flex items-center gap-4">
+        <div class="shrink-0 w-12 h-12 rounded-2xl border border-or/40 bg-noir-800/70 grid place-items-center overflow-hidden">
+          <img src="logo.png" alt="SB Interiors Marrakech" class="logo-luxe-soft w-10 h-10 object-contain" onerror="logoFallback(this)">
+        </div>
+        <div>
+          <p class="font-display text-[22px] tracking-[0.14em] leading-tight text-creme-light">SB&nbsp;INTERIORS</p>
+          <p class="text-[9px] tracking-[0.5em] uppercase text-or mt-1">Marrakech</p>
+        </div>
+      </div>
+      <p class="mt-6 text-[10px] tracking-[0.26em] uppercase text-creme/35 leading-relaxed">Votre intérieur, imaginé pour vous</p>
+    </div>
+
+    <div class="mx-8 h-px bg-gradient-to-r from-or/40 via-white/10 to-transparent"></div>
+
+    <!-- Navigation -->
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto thin-scroll px-5 py-6 space-y-1">
+      <p class="px-3 pb-2 text-[9px] tracking-[0.34em] uppercase text-creme/30">Projet</p>
+      <button data-nav="dashboard" onclick="showView('dashboard')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="layout-grid" class="w-[18px] h-[18px]"></i> Tableau de bord
+      </button>
+      <button data-nav="moodboards" onclick="showView('moodboards')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="palette" class="w-[18px] h-[18px]"></i> Moodboards
+      </button>
+      <button data-nav="rendus" onclick="showView('rendus')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="box" class="w-[18px] h-[18px]"></i> Rendus 3D
+      </button>
+      <button data-nav="visite360" onclick="showView('visite360')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="rotate-3d" class="w-[18px] h-[18px]"></i> Visite 360°
+      </button>
+      <button data-nav="plans" onclick="showView('plans')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="pencil-ruler" class="w-[18px] h-[18px]"></i> Plans 2D/3D
+      </button>
+      <button data-nav="chantier" onclick="showView('chantier')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="hard-hat" class="w-[18px] h-[18px]"></i> Suivi de chantier
+      </button>
+      <button data-nav="documents" onclick="showView('documents')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="folder" class="w-[18px] h-[18px]"></i> Documents
+      </button>
+      <p class="px-3 pt-5 pb-2 text-[9px] tracking-[0.34em] uppercase text-creme/30">Compte</p>
+      <button data-nav="messages" onclick="showView('messages')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i> Messages
+        <span id="sidebar-msg-dot" class="ml-auto w-2 h-2 rounded-full bg-or"></span>
+      </button>
+      <button data-nav="settings" onclick="showView('settings')" class="nav-item w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-2xl text-[13px] tracking-[0.08em] text-creme/70 hover:text-creme hover:bg-white/5 transition">
+        <i data-lucide="settings" class="w-[18px] h-[18px]"></i> Paramètres
+      </button>
+    </nav>
+
+    <!-- Utilisateur -->
+    <div class="px-5 py-5 border-t border-white/5">
+      <div class="flex items-center gap-3.5 px-2">
+        <img id="sidebar-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Photo de profil" class="w-10 h-10 rounded-full object-cover border border-or/40" onerror="imgFallback(this)">
+        <div class="min-w-0 flex-1">
+          <p id="sidebar-name" class="text-[13px] text-creme-light truncate">Sarah Benali</p>
+          <p id="sidebar-role" class="text-[10px] tracking-[0.18em] uppercase text-or/80">Cliente · Villa Amelkis</p>
+        </div>
+        <button onclick="logout()" title="Se déconnecter" class="w-9 h-9 grid place-items-center rounded-xl text-creme/40 hover:text-or hover:bg-white/5 transition">
+          <i data-lucide="log-out" class="w-[17px] h-[17px]"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ────────── COLONNE PRINCIPALE ────────── -->
+  <div class="lg:pl-72 min-h-screen flex flex-col">
+
+    <!-- ────────── HEADER (mobile + desktop) ────────── -->
+    <header class="sticky top-0 z-40 bg-creme/85 backdrop-blur-md border-b border-noir/5">
+      <div class="flex items-center gap-3 px-4 sm:px-6 lg:px-10 h-16">
+
+        <!-- Bouton retour (vues détail, mobile) -->
+        <button id="btn-back" onclick="goBack()" class="hidden w-10 h-10 grid place-items-center rounded-2xl bg-white border border-noir/10 text-noir/70 hover:text-noir hover:border-or/50 transition">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Logo (mobile, vues principales) -->
+        <button id="header-logo" onclick="showView('dashboard')" class="lg:hidden flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl border border-or/50 bg-noir-900 grid place-items-center overflow-hidden shrink-0">
+            <img src="logo.png" alt="" class="w-7 h-7 object-contain" onerror="logoFallback(this)">
+          </span>
+          <span class="font-display text-[17px] tracking-[0.16em] text-noir-900">SB&nbsp;INTERIORS</span>
+        </button>
+
+        <!-- Titre de la vue (vues détail) -->
+        <div id="header-title" class="hidden flex flex-col flex-1 min-w-0">
+          <h2 id="header-title-main" class="font-display text-xl text-noir-900 leading-tight truncate">Tableau de bord</h2>
+          <p id="header-title-sub" class="text-[10px] tracking-[0.22em] uppercase text-noir/40 truncate">Espace privé</p>
+        </div>
+
+        <div id="header-spacer-mobile" class="flex-1 lg:hidden"></div>
+        <div id="header-spacer-desktop" class="hidden lg:flex-1 lg:block"></div>
+
+        <!-- Interrupteur Vue Admin (visible uniquement pour le compte admin) -->
+        <div id="header-admin" class="hidden items-center gap-2.5 rounded-2xl border border-or/40 bg-or/10 px-3.5 py-2">
+          <i data-lucide="shield" class="w-4 h-4 text-or-dark"></i>
+          <span class="text-[10px] tracking-[0.22em] uppercase text-or-dark font-medium">Admin</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="admin-switch" class="sr-only peer" onchange="toggleAdminMode(this.checked)">
+            <span class="w-9 h-5 rounded-full bg-noir/15 peer-checked:bg-or transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4 switch-dot"></span>
+          </label>
+        </div>
+
+        <!-- Notifications -->
+        <div id="notif-wrap" class="relative">
+          <button onclick="toggleNotifPanel(event)" class="relative w-10 h-10 grid place-items-center rounded-2xl bg-white border border-noir/10 text-noir/70 hover:text-noir hover:border-or/50 transition">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span id="notif-badge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-or text-noir-900 text-[10px] font-semibold grid place-items-center">2</span>
+          </button>
+          <!-- Panneau notifications -->
+          <div id="notif-panel" class="hidden absolute right-0 mt-3 w-[330px] max-w-[calc(100vw-2rem)] card-luxe overflow-hidden origin-top-right">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-noir/5">
+              <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50">Notifications</p>
+              <button onclick="markNotifRead()" class="text-[11px] text-or-dark hover:text-or underline underline-offset-4 decoration-or/40 transition">Tout marquer comme lu</button>
+            </div>
+            <div class="max-h-80 overflow-y-auto thin-scroll divide-y divide-noir/5">
+              <div class="notif-item flex gap-3.5 px-5 py-4 hover:bg-creme/60 transition">
+                <span class="shrink-0 w-9 h-9 rounded-xl bg-or/15 text-or-dark grid place-items-center"><i data-lucide="image" class="w-[17px] h-[17px]"></i></span>
+                <div class="min-w-0">
+                  <p class="text-[13px] font-medium text-noir-900 leading-snug">Rendu 3D du salon disponible</p>
+                  <p class="text-[11px] text-noir/45 mt-0.5">Il y a 2 jours · Rendus 3D</p>
+                </div>
+              </div>
+              <div class="notif-item flex gap-3.5 px-5 py-4 hover:bg-creme/60 transition">
+                <span class="shrink-0 w-9 h-9 rounded-xl bg-or/15 text-or-dark grid place-items-center"><i data-lucide="calendar" class="w-[17px] h-[17px]"></i></span>
+                <div class="min-w-0">
+                  <p class="text-[13px] font-medium text-noir-900 leading-snug">Visite de chantier planifiée — 22 oct.</p>
+                  <p class="text-[11px] text-noir/45 mt-0.5">Il y a 4 jours · Suivi</p>
+                </div>
+              </div>
+              <div class="notif-item flex gap-3.5 px-5 py-4 hover:bg-creme/60 transition">
+                <span class="shrink-0 w-9 h-9 rounded-xl bg-or/15 text-or-dark grid place-items-center"><i data-lucide="file-text" class="w-[17px] h-[17px]"></i></span>
+                <div class="min-w-0">
+                  <p class="text-[13px] font-medium text-noir-900 leading-snug">Nouveau document : Devis n°D3</p>
+                  <p class="text-[11px] text-noir/45 mt-0.5">Il y a 5 jours · Documents</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo de profil -->
+        <button onclick="showView('settings')" class="shrink-0">
+          <img id="header-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Profil" class="w-10 h-10 rounded-full object-cover border-2 border-or/50 hover:border-or transition" onerror="imgFallback(this)">
+        </button>
+      </div>
+      <div class="h-[2px] bg-gradient-to-r from-transparent via-or/50 to-transparent"></div>
+    </header>
+
+    <!-- ────────── CONTENU DES VUES ────────── -->
+    <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-16">
+
+      <!-- ══════════ VUE 2 — TABLEAU DE BORD CLIENT ══════════ -->
+      <section id="view-dashboard" class="view">
+
+        <!-- Salutation -->
+        <div class="mb-6 lg:mb-8">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Espace privé · Villa Amelkis</p>
+          <h1 class="font-display text-3xl sm:text-4xl text-noir-900 leading-tight">Bonjour <span id="greeting-name">Sarah</span>,</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light">Voici l'avancement de votre projet aujourd'hui.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-5 lg:gap-6">
+
+          <!-- Carte projet principale -->
+          <div class="lg:col-span-2 group relative rounded-3xl overflow-hidden shadow-luxe cursor-pointer" onclick="showView('chantier')">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd10e?q=80&w=1400&auto=format&fit=crop"
+                 alt="Villa Amelkis — Marrakech" class="w-full h-60 sm:h-80 lg:h-[380px] object-cover group-hover:scale-[1.03] transition-transform duration-700" onerror="imgFallback(this)">
+            <div class="absolute inset-0 bg-gradient-to-t from-noir-950/90 via-noir-950/25 to-noir-950/10"></div>
+
+            <span class="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-or text-noir-900 px-4 py-1.5 text-[10px] font-semibold tracking-[0.22em] uppercase shadow-soft">
+              <span class="w-1.5 h-1.5 rounded-full bg-noir-900 dot-current"></span> En cours
+            </span>
+
+            <div class="absolute bottom-0 inset-x-0 p-5 sm:p-7">
+              <p class="text-[10px] tracking-[0.34em] uppercase text-or mb-2">Projet en cours · Réf. SB-2026-014</p>
+              <h3 class="font-display text-2xl sm:text-3xl text-creme-light leading-tight">Villa Amelkis</h3>
+              <p class="text-creme/70 text-[13px] mt-1 tracking-[0.08em]"><i data-lucide="map-pin" class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5"></i> Route de l'Ourika, Marrakech · 320&nbsp;m²</p>
+              <div class="flex items-center gap-2 mt-4 text-[11px] text-creme/60 tracking-[0.06em]">
+                <span class="rounded-full border border-white/20 bg-white/10 backdrop-blur px-3 py-1">Début · janv. 2026</span>
+                <span class="rounded-full border border-white/20 bg-white/10 backdrop-blur px-3 py-1">Livraison · déc. 2026</span>
+              </div>
+            </div>
+
+            <button class="absolute bottom-5 right-5 sm:bottom-7 sm:right-7 w-12 h-12 rounded-full bg-creme-light text-noir-900 grid place-items-center shadow-luxe hover:bg-or transition active:scale-95" aria-label="Voir le suivi">
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Colonne droite : avancement + prochaine étape + message -->
+          <div class="flex flex-col gap-5 lg:gap-6">
+            <!-- Avancement global -->
+            <div class="card-luxe p-6">
+              <div class="flex items-end justify-between mb-4">
+                <div>
+                  <p class="text-[10px] tracking-[0.28em] uppercase text-noir/40">Avancement global</p>
+                  <p class="font-display text-4xl text-noir-900 mt-1.5 leading-none"><span id="dash-progress-pct">68</span><span class="text-xl text-or-dark">%</span></p>
+                </div>
+                <i data-lucide="trending-up" class="w-5 h-5 text-or"></i>
+              </div>
+              <div class="h-2.5 rounded-full bg-noir/10 overflow-hidden">
+                <div id="dash-progress-bar" class="h-full rounded-full bar-shimmer transition-all duration-700" style="width:68%"></div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mt-5 text-center">
+                <div class="rounded-2xl bg-creme py-3">
+                  <p class="font-display text-xl text-noir-900 leading-none" id="stat-phases">3/5</p>
+                  <p class="text-[9px] tracking-[0.16em] uppercase text-noir/40 mt-1.5">Phases</p>
+                </div>
+                <div class="rounded-2xl bg-creme py-3">
+                  <p class="font-display text-xl text-noir-900 leading-none">46</p>
+                  <p class="text-[9px] tracking-[0.16em] uppercase text-noir/40 mt-1.5">Jours restants</p>
+                </div>
+                <div class="rounded-2xl bg-creme py-3">
+                  <p class="font-display text-xl text-noir-900 leading-none">24</p>
+                  <p class="text-[9px] tracking-[0.16em] uppercase text-noir/40 mt-1.5">Photos</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prochaine étape -->
+            <div class="card-luxe p-6 border-l-4 border-l-or">
+              <p class="text-[10px] tracking-[0.28em] uppercase text-noir/40">Prochaine étape</p>
+              <div class="flex items-start gap-3.5 mt-3">
+                <span class="shrink-0 w-10 h-10 rounded-2xl bg-noir-900 text-or grid place-items-center"><i data-lucide="calendar" class="w-[18px] h-[18px]"></i></span>
+                <div>
+                  <p class="text-[15px] font-medium text-noir-900 leading-snug">Rendu 3D — Salon</p>
+                  <p class="text-[12px] text-or-dark mt-0.5 tracking-[0.06em]">18 oct. 2026</p>
+                </div>
+              </div>
+              <button onclick="showView('rendus')" class="mt-4 w-full py-2.5 rounded-xl border border-noir/10 text-[11px] tracking-[0.2em] uppercase text-noir/60 hover:border-or/60 hover:text-or-dark transition">Voir les rendus</button>
+            </div>
+
+            <!-- Dernier message -->
+            <div class="card-luxe p-5 cursor-pointer hover:border-or/40 transition" onclick="showView('messages'); openThread('sofia')">
+              <div class="flex items-center gap-3.5">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&auto=format&fit=crop" alt="Sofia Bennani" class="w-11 h-11 rounded-full object-cover border border-or/40" onerror="imgFallback(this)">
+                <div class="min-w-0 flex-1">
+                  <p class="text-[10px] tracking-[0.24em] uppercase text-noir/40">Dernier message</p>
+                  <p class="text-[13px] font-medium text-noir-900 mt-0.5 truncate">Sofia Bennani — Architecte</p>
+                  <p class="text-[12px] text-noir/45 truncate mt-0.5">Bonjour Sarah, la maçonnerie du canopy est terminée…</p>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-noir/30"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accès rapides -->
+          <div class="lg:col-span-3 card-luxe p-6 lg:p-7">
+            <div class="flex items-center justify-between mb-5">
+              <p class="text-[10px] tracking-[0.28em] uppercase text-noir/40">Accès rapide</p>
+              <p class="text-[10px] tracking-[0.2em] uppercase text-or-dark hidden sm:block">Villa Amelkis · Suivi complet</p>
+            </div>
+            <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
+              <button onclick="showView('moodboards')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="palette" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Moodboards</span>
+              </button>
+              <button onclick="showView('rendus')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="box" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Rendus 3D</span>
+              </button>
+              <button onclick="showView('visite360')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="rotate-3d" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Visite 360°</span>
+              </button>
+              <button onclick="showView('plans')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="pencil-ruler" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Plans 2D/3D</span>
+              </button>
+              <button onclick="showView('chantier')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="hard-hat" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Suivi de chantier</span>
+              </button>
+              <button onclick="showView('documents')" class="tile group rounded-2xl border border-noir/10 bg-creme/60 hover:bg-noir-900 hover:border-noir-900 hover:shadow-luxe p-4 lg:p-5 transition-all duration-300 active:scale-95">
+                <span class="mx-auto w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-noir-900 text-or grid place-items-center mb-3 group-hover:bg-or group-hover:text-noir-900 transition-colors"><i data-lucide="folder" class="w-5 h-5"></i></span>
+                <span class="block text-[11px] lg:text-[12px] tracking-[0.1em] text-noir-900 group-hover:text-creme transition-colors">Documents</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Panneau de contrôle Administrateur (visible en mode admin) -->
+          <div id="admin-panel" class="admin-only hidden lg:col-span-3 rounded-3xl border-2 border-dashed border-or/60 bg-or/[0.06] p-6 lg:p-8">
+            <div class="flex flex-wrap items-center gap-3 mb-6">
+              <span class="w-10 h-10 rounded-2xl bg-noir-900 text-or grid place-items-center"><i data-lucide="shield" class="w-5 h-5"></i></span>
+              <div>
+                <p class="font-display text-xl text-noir-900 leading-tight">Contrôles Administrateur</p>
+                <p class="text-[10px] tracking-[0.24em] uppercase text-or-dark">Simulation · Villa Amelkis</p>
+              </div>
+              <span class="ml-auto rounded-full bg-noir-900 text-or text-[10px] tracking-[0.2em] uppercase px-4 py-1.5">Mode admin actif</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-10">
+              <!-- Réglage de l'avancement -->
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <p class="text-[11px] tracking-[0.22em] uppercase text-noir/50">Avancement global</p>
+                  <p class="font-display text-2xl text-noir-900 leading-none"><span id="admin-progress-val">68</span>%</p>
+                </div>
+                <input id="admin-progress-slider" type="range" min="0" max="100" value="68" step="1"
+                       class="w-full" oninput="setProgress(this.value)" style="--fill:68%">
+                <div class="flex justify-between text-[10px] text-noir/35 mt-2 tracking-[0.1em]">
+                  <span>0%</span><span>50%</span><span>100%</span>
+                </div>
+              </div>
+
+              <!-- Gestion des étapes + accès client -->
+              <div class="space-y-4">
+                <div>
+                  <p class="text-[11px] tracking-[0.22em] uppercase text-noir/50 mb-2.5">Statut des étapes du chantier</p>
+                  <div id="admin-steps" class="flex flex-wrap gap-2"></div>
+                </div>
+                <button id="block-btn" onclick="toggleBlockClient()"
+                        class="w-full inline-flex items-center justify-center gap-2.5 h-12 rounded-2xl bg-noir-900 text-creme-light text-[12px] font-medium tracking-[0.2em] uppercase hover:bg-noir-700 transition active:scale-[0.98]">
+                  <i data-lucide="lock" class="w-4 h-4"></i>
+                  <span id="block-btn-label">Bloquer l'accès client</span>
+                </button>
+                <p class="text-[11px] text-noir/40 leading-relaxed">Astuce : cliquez sur une étape ci-dessus pour faire évoluer son statut (Terminée → En cours → À venir). Le nouvel avancement est reflété instantanément sur tous les écrans du client.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══════════ VUE 3 — MOODBOARDS & MATÉRIAUX ══════════ -->
+      <section id="view-moodboards" class="view hidden">
+
+        <!-- En-tête de page (desktop) -->
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Matériaux & inspirations</p>
+          <h1 class="font-display text-3xl text-noir-900">Moodboards</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Explorez les univers proposés pour chaque pièce de la Villa Amelkis et validez vos préférés.</p>
+        </div>
+
+        <!-- Filtres par pièce -->
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 mb-6" id="mood-filters">
+          <button onclick="filterMoodboard('salon')" data-room="salon" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-noir-900 text-creme-light shadow-soft">Salon</button>
+          <button onclick="filterMoodboard('cuisine')" data-room="cuisine" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Cuisine</button>
+          <button onclick="filterMoodboard('chambre')" data-room="chambre" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Chambre</button>
+          <button onclick="filterMoodboard('sdb')" data-room="sdb" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Salle de bain</button>
+        </div>
+
+        <!-- Contenu dynamique du moodboard -->
+        <div id="moodboard-content"></div>
+
+        <!-- Bouton de validation -->
+        <button id="moodboard-validate" onclick="validateMoodboard()"
+                class="mt-7 w-full h-14 rounded-2xl bg-noir-900 text-creme-light text-[13px] font-medium tracking-[0.24em] uppercase inline-flex items-center justify-center gap-3 hover:bg-noir-700 transition-all duration-300 active:scale-[0.98] shadow-luxe">
+          <i data-lucide="check" class="w-5 h-5"></i>
+          <span>Valider ce moodboard</span>
+        </button>
+        <p id="moodboard-hint" class="text-center text-[11px] text-noir/40 mt-3.5 tracking-[0.06em]">Votre validation sera transmise à Sofia, votre architecte d'intérieur.</p>
+      </section>
+
+      <!-- ══════════ VUE 4 — RENDUS 3D & COMMENTAIRES ══════════ -->
+      <section id="view-rendus" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Visualisations HD</p>
+          <h1 class="font-display text-3xl text-noir-900">Rendus 3D</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Parcourez les rendus photoréalistes de chaque pièce et laissez vos commentaires directement aux designers.</p>
+        </div>
+
+        <!-- Filtres par pièce -->
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 mb-6" id="render-filters">
+          <button onclick="filterRenders('salon')" data-room="salon" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-noir-900 text-creme-light shadow-soft">Salon</button>
+          <button onclick="filterRenders('cuisine')" data-room="cuisine" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Cuisine</button>
+          <button onclick="filterRenders('chambre')" data-room="chambre" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Chambre</button>
+          <button onclick="filterRenders('sdb')" data-room="sdb" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Salle de bain</button>
+        </div>
+
+        <!-- Visionneuse principale -->
+        <div class="relative rounded-3xl overflow-hidden shadow-luxe bg-noir-900">
+          <img id="render-main" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop" alt="Rendu 3D"
+               class="w-full h-72 sm:h-[420px] lg:h-[500px] object-cover select-none" draggable="false" onerror="imgFallback(this)">
+          <div class="absolute inset-0 bg-gradient-to-t from-noir-950/80 via-transparent to-noir-950/20 pointer-events-none"></div>
+
+          <!-- Contrôles carousel -->
+          <button onclick="stepRender(-1)" aria-label="Rendu précédent"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-creme-light/90 backdrop-blur text-noir-900 grid place-items-center shadow-luxe hover:bg-or transition active:scale-90">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          </button>
+          <button onclick="stepRender(1)" aria-label="Rendu suivant"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-creme-light/90 backdrop-blur text-noir-900 grid place-items-center shadow-luxe hover:bg-or transition active:scale-90">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+
+          <!-- Légende -->
+          <div class="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex items-end justify-between gap-4">
+            <div>
+              <p id="render-badge" class="text-[10px] tracking-[0.3em] uppercase text-or mb-1.5">Salon · Rendu HD</p>
+              <h3 id="render-title" class="font-display text-2xl text-creme-light leading-tight">Salon — Vue principale</h3>
+            </div>
+            <span id="render-count" class="shrink-0 rounded-full border border-white/25 bg-white/10 backdrop-blur text-creme-light text-[11px] tracking-[0.14em] px-3.5 py-1.5">1 / 3</span>
+          </div>
+        </div>
+
+        <!-- Miniatures -->
+        <div id="render-thumbs" class="flex gap-3 overflow-x-auto no-scrollbar mt-4 pb-1"></div>
+
+        <!-- Zone de commentaires -->
+        <div class="card-luxe mt-7 overflow-hidden">
+          <div class="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-noir/5">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center"><i data-lucide="message-circle" class="w-[17px] h-[17px]"></i></span>
+              <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50">Commentaires</p>
+            </div>
+            <span id="comment-count" class="rounded-full bg-creme text-noir/60 text-[11px] px-3 py-1 tracking-[0.08em]">2</span>
+          </div>
+
+          <div id="comments-list" class="px-5 sm:px-6 py-5 space-y-5 max-h-96 overflow-y-auto thin-scroll"></div>
+
+          <!-- Saisie de commentaire -->
+          <div class="px-5 sm:px-6 py-4 border-t border-noir/5 bg-creme/50 flex items-center gap-3">
+            <div id="comment-avatar" class="w-9 h-9 rounded-full bg-noir-900 grid place-items-center shrink-0 overflow-hidden">
+              <img src="logo.png" alt="" class="w-[26px] h-[26px] object-contain" onerror="logoFallback(this)">
+            </div>
+            <input id="comment-input" type="text" placeholder="Écrire un message…"
+                   class="flex-1 h-11 rounded-2xl bg-white border border-noir/10 px-4 text-[14px] placeholder-noir/30 focus:outline-none focus:border-or/60 transition"
+                   onkeydown="if(event.key==='Enter') addComment()">
+            <button onclick="addComment()" aria-label="Envoyer"
+                    class="w-11 h-11 rounded-2xl bg-noir-900 text-or grid place-items-center hover:bg-or hover:text-noir-900 transition active:scale-90 shrink-0">
+              <i data-lucide="send" class="w-[18px] h-[18px]"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ VUE 5 — VISITE VIRTUELLE 360° ══════════ -->
+      <section id="view-visite360" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Visite virtuelle immersive</p>
+          <h1 class="font-display text-3xl text-noir-900">Visite 360°</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Déplacez-vous librement dans les espaces de votre future villa, comme si vous y étiez déjà.</p>
+        </div>
+
+        <!-- Filtres par zone -->
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 mb-6" id="tour-filters">
+          <button onclick="filterTour('salon')" data-zone="salon" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-noir-900 text-creme-light shadow-soft">Salon</button>
+          <button onclick="filterTour('cuisine')" data-zone="cuisine" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Cuisine</button>
+          <button onclick="filterTour('chambre')" data-zone="chambre" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Chambre</button>
+          <button onclick="filterTour('exterieur')" data-zone="exterieur" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Extérieur</button>
+        </div>
+
+        <!-- Visionneuse immersive -->
+        <div class="relative rounded-3xl overflow-hidden shadow-luxe bg-noir-900">
+          <img id="tour-main" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600&auto=format&fit=crop" alt="Vue 360°"
+               class="w-full h-80 sm:h-[460px] lg:h-[520px] object-cover select-none" draggable="false" onerror="imgFallback(this)">
+          <div class="absolute inset-0 bg-gradient-to-b from-noir-950/40 via-transparent to-noir-950/75 pointer-events-none"></div>
+
+          <!-- Badge 360° central animé -->
+          <div class="absolute inset-0 grid place-items-center pointer-events-none">
+            <div class="relative w-28 h-28 sm:w-32 sm:h-32">
+              <div class="absolute inset-0 rounded-full border-2 border-dashed border-creme-light/70 ring-360"></div>
+              <div class="absolute inset-3 rounded-full border border-or/50 bg-noir-950/45 backdrop-blur-sm grid place-items-center">
+                <div class="text-center">
+                  <p class="font-display text-2xl sm:text-[26px] text-creme-light leading-none">360°</p>
+                  <i data-lucide="rotate-3d" class="w-4 h-4 mx-auto text-or mt-1.5"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton plein écran flottant -->
+          <button onclick="open360()" aria-label="Plein écran"
+                  class="absolute top-4 right-4 w-11 h-11 rounded-full bg-noir-950/60 backdrop-blur border border-white/20 text-creme-light grid place-items-center hover:bg-or hover:text-noir-900 hover:border-or transition active:scale-90">
+            <i data-lucide="maximize-2" class="w-[18px] h-[18px]"></i>
+          </button>
+
+          <!-- Bandeau bas -->
+          <div class="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p id="tour-zone" class="text-[10px] tracking-[0.3em] uppercase text-or mb-1.5">Salon · Immersion</p>
+              <h3 id="tour-title" class="font-display text-2xl text-creme-light leading-tight">Salon — 42 m²</h3>
+            </div>
+            <button onclick="open360()"
+                    class="inline-flex items-center gap-2.5 h-11 px-5 rounded-2xl bg-creme-light text-noir-900 text-[12px] font-medium tracking-[0.18em] uppercase hover:bg-or transition active:scale-95 shadow-luxe">
+              <i data-lucide="maximize-2" class="w-4 h-4"></i> Voir en plein écran
+            </button>
+          </div>
+        </div>
+
+        <!-- Miniatures des zones -->
+        <div id="tour-thumbs" class="grid grid-cols-4 gap-3 mt-4"></div>
+
+        <p class="mt-4 text-center text-[11px] text-noir/40 tracking-[0.06em]"><i data-lucide="info" class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5"></i>Simulation d'intégration Kuula — dans la version finale, la visite s'ouvrira en panorama interactif glissable.</p>
+      </section>
+
+      <!-- ══════════ VUE 6 — PLANS 2D/3D ══════════ -->
+      <section id="view-plans" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Documentation technique</p>
+          <h1 class="font-display text-3xl text-noir-900">Plans 2D/3D</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Consultez les plans d'architecte de la villa, étage par étage, et téléchargez les documents techniques.</p>
+        </div>
+
+        <!-- Onglets d'étages -->
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 mb-6" id="floor-tabs">
+          <button onclick="setFloor('rdc')" data-floor="rdc" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-noir-900 text-creme-light shadow-soft">Rez-de-chaussée</button>
+          <button onclick="setFloor('etage')" data-floor="etage" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Étage</button>
+          <button onclick="setFloor('exterieur')" data-floor="exterieur" class="pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition">Extérieur</button>
+        </div>
+
+        <!-- Visionneuse du plan -->
+        <div class="card-luxe overflow-hidden">
+          <div class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-noir/5 bg-creme/50">
+            <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center"><i data-lucide="pencil-ruler" class="w-[17px] h-[17px]"></i></span>
+            <div class="mr-auto">
+              <p id="plan-floor-label" class="text-[14px] font-medium text-noir-900 leading-tight">Rez-de-chaussée</p>
+              <p id="plan-floor-sub" class="text-[11px] text-noir/45 tracking-[0.08em]">Surface habitable · 210 m² · Échelle 1:100</p>
+            </div>
+            <!-- Contrôles zoom -->
+            <div class="flex items-center gap-2">
+              <button onclick="zoomPlan(-0.25)" aria-label="Zoom arrière" class="w-10 h-10 rounded-xl bg-white border border-noir/10 text-noir/70 grid place-items-center hover:border-or/60 hover:text-noir transition active:scale-90">
+                <i data-lucide="zoom-out" class="w-[18px] h-[18px]"></i>
+              </button>
+              <span id="plan-zoom-val" class="min-w-[52px] text-center text-[12px] font-medium tracking-[0.1em] text-noir/70">100%</span>
+              <button onclick="zoomPlan(0.25)" aria-label="Zoom avant" class="w-10 h-10 rounded-xl bg-white border border-noir/10 text-noir/70 grid place-items-center hover:border-or/60 hover:text-noir transition active:scale-90">
+                <i data-lucide="zoom-in" class="w-[18px] h-[18px]"></i>
+              </button>
+              <button onclick="zoomPlan(0)" aria-label="Réinitialiser" class="w-10 h-10 rounded-xl bg-noir-900 text-or grid place-items-center hover:bg-or hover:text-noir-900 transition active:scale-90">
+                <i data-lucide="refresh-cw" class="w-[16px] h-[16px]"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Canevas du plan (pannable au scroll quand zoomé) -->
+          <div id="plan-viewport" class="overflow-auto thin-scroll bg-noir-900 h-[300px] sm:h-[440px] lg:h-[520px] cursor-grab active:cursor-grabbing">
+            <div id="plan-canvas" class="w-full p-4">
+
+              <!-- Plan RDC -->
+              <svg id="plan-rdc" viewBox="0 0 800 560" class="plan-svg w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="800" height="560" fill="#1A1817"/>
+                <!-- Murs extérieurs -->
+                <rect x="60" y="60" width="680" height="440" class="wall"/>
+                <!-- Cloisons intérieures -->
+                <line x1="440" y1="60" x2="440" y2="320" class="wall-inner"/>
+                <line x1="640" y1="60" x2="640" y2="320" class="wall-inner"/>
+                <line x1="60" y1="320" x2="740" y2="320" class="wall-inner"/>
+                <line x1="440" y1="240" x2="640" y2="240" class="wall-inner"/>
+                <!-- Baies / portes (ouvertures) -->
+                <rect x="200" y="56" width="90" height="9" fill="#1A1817"/>
+                <rect x="436" y="380" width="9" height="70" fill="#1A1817"/>
+                <rect x="636" y="130" width="9" height="70" fill="#1A1817"/>
+                <rect x="530" y="316" width="80" height="9" fill="#1A1817"/>
+                <!-- Surfaces -->
+                <rect x="64" y="64" width="372" height="252" class="surface"/>
+                <rect x="444" y="64" width="192" height="172" class="surface"/>
+                <!-- Terrasse -->
+                <rect x="444" y="324" width="292" height="172" class="terrasse"/>
+                <!-- Labels -->
+                <text x="250" y="180" text-anchor="middle" class="room-label">SALON</text>
+                <text x="250" y="202" text-anchor="middle" class="room-dim">38 m²</text>
+                <text x="540" y="150" text-anchor="middle" class="room-label">CUISINE</text>
+                <text x="540" y="172" text-anchor="middle" class="room-dim">16 m²</text>
+                <text x="690" y="150" text-anchor="middle" class="room-label">SdB</text>
+                <text x="690" y="172" text-anchor="middle" class="room-dim">7 m²</text>
+                <text x="540" y="285" text-anchor="middle" class="room-dim">CELLIER</text>
+                <text x="690" y="285" text-anchor="middle" class="room-dim">HALL</text>
+                <text x="250" y="405" text-anchor="middle" class="room-label">SALLE À MANGER</text>
+                <text x="250" y="427" text-anchor="middle" class="room-dim">24 m²</text>
+                <text x="590" y="405" text-anchor="middle" class="room-dim" fill="#C5A880">TERRASSE</text>
+                <text x="590" y="427" text-anchor="middle" class="room-dim">45 m²</text>
+                <!-- Mobilier schématique -->
+                <rect x="110" y="110" width="150" height="50" rx="8" fill="none" stroke="#8B7355" stroke-width="2" opacity="0.7"/>
+                <circle cx="360" cy="150" r="28" fill="none" stroke="#8B7355" stroke-width="2" opacity="0.7"/>
+                <rect x="470" y="90" width="130" height="55" rx="6" fill="none" stroke="#8B7355" stroke-width="2" opacity="0.7"/>
+                <!-- Nord + cartouche -->
+                <circle cx="740" cy="30" r="14" fill="none" stroke="#C5A880" stroke-width="1.5"/>
+                <text x="740" y="34" text-anchor="middle" fill="#C5A880" font-size="10">N</text>
+                <line x1="740" y1="16" x2="740" y2="20" stroke="#C5A880" stroke-width="2"/>
+                <text x="60" y="535" fill="#C5A880" font-size="11" letter-spacing="2">VILLA AMELKIS — REZ-DE-CHAUSSÉE · SB INTERIORS MARRAKECH · ÉCH. 1:100 (PLAN INDICATIF)</text>
+              </svg>
+
+              <!-- Plan Étage -->
+              <svg id="plan-etage" viewBox="0 0 800 560" class="plan-svg w-full h-auto hidden" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="800" height="560" fill="#1A1817"/>
+                <rect x="60" y="60" width="680" height="440" class="wall"/>
+                <line x1="440" y1="60" x2="440" y2="380" class="wall-inner"/>
+                <line x1="60" y1="260" x2="440" y2="260" class="wall-inner"/>
+                <line x1="240" y1="260" x2="240" y2="380" class="wall-inner"/>
+                <line x1="60" y1="380" x2="740" y2="380" class="wall-inner"/>
+                <line x1="620" y1="260" x2="620" y2="380" class="wall-inner"/>
+                <rect x="150" y="56" width="90" height="9" fill="#1A1817"/>
+                <rect x="436" y="150" width="9" height="70" fill="#1A1817"/>
+                <rect x="236" y="290" width="9" height="60" fill="#1A1817"/>
+                <rect x="64" y="64" width="372" height="192" class="surface"/>
+                <rect x="444" y="444" width="292" height="52" class="terrasse"/>
+                <text x="250" y="160" text-anchor="middle" class="room-label">SUITE PARENTALE</text>
+                <text x="250" y="182" text-anchor="middle" class="room-dim">32 m²</text>
+                <text x="150" y="325" text-anchor="middle" class="room-label">DRESSING</text>
+                <text x="150" y="347" text-anchor="middle" class="room-dim">9 m²</text>
+                <text x="340" y="325" text-anchor="middle" class="room-label">SdB</text>
+                <text x="340" y="347" text-anchor="middle" class="room-dim">11 m²</text>
+                <text x="590" y="160" text-anchor="middle" class="room-label">CHAMBRE 2</text>
+                <text x="590" y="182" text-anchor="middle" class="room-dim">18 m²</text>
+                <text x="530" y="325" text-anchor="middle" class="room-label">BUREAU</text>
+                <text x="530" y="347" text-anchor="middle" class="room-dim">12 m²</text>
+                <text x="680" y="318" text-anchor="middle" class="room-dim">PALIER</text>
+                <!-- Escalier -->
+                <g stroke="#C5A880" stroke-width="2" fill="none" opacity="0.8">
+                  <line x1="655" y1="285" x2="725" y2="285"/><line x1="655" y1="295" x2="725" y2="295"/>
+                  <line x1="655" y1="305" x2="725" y2="305"/><line x1="655" y1="315" x2="725" y2="315"/>
+                  <line x1="655" y1="325" x2="725" y2="325"/><line x1="655" y1="335" x2="725" y2="335"/>
+                  <line x1="655" y1="345" x2="725" y2="345"/><line x1="655" y1="355" x2="725" y2="355"/>
+                </g>
+                <text x="250" y="440" text-anchor="middle" class="room-label">CHAMBRE 3</text>
+                <text x="250" y="462" text-anchor="middle" class="room-dim">14 m²</text>
+                <text x="590" y="470" text-anchor="middle" class="room-dim" fill="#C5A880">BALCON</text>
+                <circle cx="740" cy="30" r="14" fill="none" stroke="#C5A880" stroke-width="1.5"/>
+                <text x="740" y="34" text-anchor="middle" fill="#C5A880" font-size="10">N</text>
+                <line x1="740" y1="16" x2="740" y2="20" stroke="#C5A880" stroke-width="2"/>
+                <text x="60" y="535" fill="#C5A880" font-size="11" letter-spacing="2">VILLA AMELKIS — ÉTAGE · SB INTERIORS MARRAKECH · ÉCH. 1:100 (PLAN INDICATIF)</text>
+              </svg>
+
+              <!-- Plan Extérieur -->
+              <svg id="plan-exterieur" viewBox="0 0 800 560" class="plan-svg w-full h-auto hidden" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="800" height="560" fill="#1A1817"/>
+                <!-- Limite de propriété -->
+                <rect x="40" y="40" width="720" height="480" fill="rgba(197,168,128,0.04)" stroke="#8B7355" stroke-width="2" stroke-dasharray="14 8"/>
+                <!-- Villa (empreinte) -->
+                <rect x="150" y="230" width="310" height="250" class="wall"/>
+                <text x="305" y="345" text-anchor="middle" class="room-label">VILLA</text>
+                <text x="305" y="367" text-anchor="middle" class="room-dim">2 NIVEAUX</text>
+                <!-- Terrasse piscine -->
+                <rect x="480" y="230" width="220" height="250" class="terrasse"/>
+                <rect x="515" y="270" width="150" height="150" rx="10" fill="rgba(197,168,128,0.18)" stroke="#C5A880" stroke-width="3"/>
+                <text x="590" y="350" text-anchor="middle" class="room-dim" fill="#E3CFA9">PISCINE</text>
+                <text x="590" y="372" text-anchor="middle" class="room-dim">12 × 5 m</text>
+                <!-- Jardins & palmiers -->
+                <g fill="none" stroke="#8B7355" stroke-width="2" opacity="0.85">
+                  <circle cx="110" cy="110" r="26"/><circle cx="110" cy="110" r="6" fill="#8B7355"/>
+                  <circle cx="250" cy="120" r="22"/><circle cx="250" cy="120" r="5" fill="#8B7355"/>
+                  <circle cx="410" cy="105" r="28"/><circle cx="410" cy="105" r="6" fill="#8B7355"/>
+                  <circle cx="590" cy="115" r="24"/><circle cx="590" cy="115" r="5" fill="#8B7355"/>
+                  <circle cx="700" cy="105" r="26"/><circle cx="700" cy="105" r="6" fill="#8B7355"/>
+                  <circle cx="120" cy="420" r="24"/><circle cx="120" cy="420" r="5" fill="#8B7355"/>
+                  <circle cx="105" cy="480" r="20"/><circle cx="105" cy="480" r="4" fill="#8B7355"/>
+                </g>
+                <text x="490" y="180" text-anchor="middle" class="room-dim">JARDINS & PALMERAIE</text>
+                <!-- Allée + portail -->
+                <rect x="255" y="480" width="100" height="40" fill="rgba(197,168,128,0.12)"/>
+                <text x="305" y="528" text-anchor="middle" class="room-dim" fill="#C5A880">PORTAIL</text>
+                <rect x="610" y="480" width="90" height="40" fill="rgba(197,168,128,0.12)"/>
+                <text x="655" y="528" text-anchor="middle" class="room-dim">PARKING 2 VL</text>
+                <circle cx="740" cy="30" r="14" fill="none" stroke="#C5A880" stroke-width="1.5"/>
+                <text x="740" y="34" text-anchor="middle" fill="#C5A880" font-size="10">N</text>
+                <line x1="740" y1="16" x2="740" y2="20" stroke="#C5A880" stroke-width="2"/>
+                <text x="40" y="545" fill="#C5A880" font-size="11" letter-spacing="2">VILLA AMELKIS — PLAN EXTÉRIEUR · SB INTERIORS MARRAKECH · TERRAIN 1 200 m² (PLAN INDICATIF)</text>
+              </svg>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Téléchargements PDF -->
+        <div class="card-luxe mt-6 overflow-hidden">
+          <div class="flex items-center gap-3 px-5 sm:px-6 py-4 border-b border-noir/5">
+            <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center"><i data-lucide="download" class="w-[17px] h-[17px]"></i></span>
+            <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50">Documents techniques</p>
+            <span class="ml-auto text-[11px] text-noir/40 tracking-[0.08em]">PDF · 3 fichiers</span>
+          </div>
+          <div class="divide-y divide-noir/5">
+            <div class="flex items-center gap-4 px-5 sm:px-6 py-4 hover:bg-creme/40 transition">
+              <span class="shrink-0 w-11 h-11 rounded-2xl bg-red-600/10 text-red-600 grid place-items-center text-[10px] font-bold tracking-wider">PDF</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[14px] font-medium text-noir-900 truncate">Plan d'aménagement</p>
+                <p class="text-[11px] text-noir/45 mt-0.5 tracking-[0.06em]">PDF · 1,2 Mo · Mis à jour le 28 sept. 2026</p>
+              </div>
+              <button onclick="downloadFile('Plan d\'aménagement.pdf')" class="shrink-0 w-10 h-10 rounded-xl border border-noir/10 text-noir/60 grid place-items-center hover:border-or/60 hover:text-or-dark transition active:scale-90" aria-label="Télécharger">
+                <i data-lucide="download" class="w-[18px] h-[18px]"></i>
+              </button>
+            </div>
+            <div class="flex items-center gap-4 px-5 sm:px-6 py-4 hover:bg-creme/40 transition">
+              <span class="shrink-0 w-11 h-11 rounded-2xl bg-red-600/10 text-red-600 grid place-items-center text-[10px] font-bold tracking-wider">PDF</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[14px] font-medium text-noir-900 truncate">Plan électrique</p>
+                <p class="text-[11px] text-noir/45 mt-0.5 tracking-[0.06em]">PDF · 800 Ko · Mis à jour le 14 sept. 2026</p>
+              </div>
+              <button onclick="downloadFile('Plan électrique.pdf')" class="shrink-0 w-10 h-10 rounded-xl border border-noir/10 text-noir/60 grid place-items-center hover:border-or/60 hover:text-or-dark transition active:scale-90" aria-label="Télécharger">
+                <i data-lucide="download" class="w-[18px] h-[18px]"></i>
+              </button>
+            </div>
+            <div class="flex items-center gap-4 px-5 sm:px-6 py-4 hover:bg-creme/40 transition">
+              <span class="shrink-0 w-11 h-11 rounded-2xl bg-red-600/10 text-red-600 grid place-items-center text-[10px] font-bold tracking-wider">PDF</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[14px] font-medium text-noir-900 truncate">Plan plomberie</p>
+                <p class="text-[11px] text-noir/45 mt-0.5 tracking-[0.06em]">PDF · 750 Ko · Mis à jour le 14 sept. 2026</p>
+              </div>
+              <button onclick="downloadFile('Plan plomberie.pdf')" class="shrink-0 w-10 h-10 rounded-xl border border-noir/10 text-noir/60 grid place-items-center hover:border-or/60 hover:text-or-dark transition active:scale-90" aria-label="Télécharger">
+                <i data-lucide="download" class="w-[18px] h-[18px]"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ VUE 7 — SUIVI DE CHANTIER ══════════ -->
+      <section id="view-chantier" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Avancement & étapes</p>
+          <h1 class="font-display text-3xl text-noir-900">Suivi de chantier</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Suivez l'avancement des travaux semaine par semaine, avec photos et commentaires de l'équipe.</p>
+        </div>
+
+        <!-- Avancement global -->
+        <div class="card-luxe p-6 mb-6">
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <p class="text-[10px] tracking-[0.28em] uppercase text-noir/40">Avancement global</p>
+              <p class="font-display text-4xl text-noir-900 mt-1.5 leading-none"><span id="chantier-progress-pct">68</span><span class="text-xl text-or-dark">%</span></p>
+            </div>
+            <div class="text-right">
+              <p class="text-[11px] text-noir/45 tracking-[0.06em]">Démarré le 12 janvier 2026</p>
+              <p class="text-[11px] text-or-dark tracking-[0.06em]">Livraison estimée · déc. 2026</p>
+            </div>
+          </div>
+          <div class="h-2.5 rounded-full bg-noir/10 overflow-hidden">
+            <div id="chantier-progress-bar" class="h-full rounded-full bar-shimmer transition-all duration-700" style="width:68%"></div>
+          </div>
+        </div>
+
+        <!-- Timeline des étapes -->
+        <div class="card-luxe p-6 mb-6">
+          <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 mb-6">Étapes du chantier</p>
+          <div id="steps-timeline" class="relative"></div>
+          <p id="steps-admin-hint" class="admin-only hidden mt-5 text-[11px] text-or-dark bg-or/10 rounded-2xl px-4 py-3 leading-relaxed"><i data-lucide="info" class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5"></i>Mode admin : cliquez sur le badge de statut d'une étape pour la faire évoluer (Terminée → En cours → À venir).</p>
+        </div>
+
+        <!-- Médias du chantier -->
+        <div class="card-luxe overflow-hidden">
+          <div class="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-noir/5 bg-creme/40">
+            <button onclick="setChantierTab('photos')" id="chantier-tab-photos" class="pill rounded-2xl px-4 sm:px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-noir-900 text-creme-light">Photos</button>
+            <button onclick="setChantierTab('videos')" id="chantier-tab-videos" class="pill rounded-2xl px-4 sm:px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 transition">Vidéos</button>
+            <button onclick="setChantierTab('comments')" id="chantier-tab-comments" class="pill rounded-2xl px-4 sm:px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase bg-white text-noir/60 border border-noir/10 hover:border-or/60 transition">Commentaires</button>
+          </div>
+
+          <!-- Onglet Photos -->
+          <div id="chantier-photos" class="p-5 sm:p-6 space-y-8">
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center text-[10px] font-semibold">12</span>
+                <div>
+                  <p class="text-[14px] font-medium text-noir-900">Semaine du 12 octobre 2026</p>
+                  <p class="text-[11px] text-noir/45">Électricité · Pose des gaines</p>
+                </div>
+                <span class="ml-auto rounded-full bg-or/15 text-or-dark text-[10px] tracking-[0.14em] uppercase px-3 py-1">En cours</span>
+              </div>
+              <div class="grid grid-cols-3 gap-3">
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop" alt="Chantier — gaines salon" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=800&auto=format&fit=crop" alt="Chantier — préparation murs" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1504307894-a7e2f9e5c6a5?q=80&w=800&auto=format&fit=crop" alt="Chantier — tableau électrique" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+              </div>
+              <p class="mt-3 text-[12px] text-noir/45 tracking-[0.04em]"><i data-lucide="camera" class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5 text-or-dark"></i>Pose des gaines électriques — Salon</p>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center text-[10px] font-semibold">28</span>
+                <div>
+                  <p class="text-[14px] font-medium text-noir-900">Semaine du 28 septembre 2026</p>
+                  <p class="text-[11px] text-noir/45">Gros œuvre · Finitions dalle</p>
+                </div>
+                <span class="ml-auto rounded-full bg-green-600/10 text-green-700 text-[10px] tracking-[0.14em] uppercase px-3 py-1">Terminée</span>
+              </div>
+              <div class="grid grid-cols-3 gap-3">
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=800&auto=format&fit=crop" alt="Dalle béton" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop" alt="Canopy salon" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+                <button onclick="toast('Aperçu photo simulé — maquette interactive','image')" class="group relative rounded-2xl overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd10e?q=80&w=800&auto=format&fit=crop" alt="Façade villa" class="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+                  <span class="absolute inset-0 bg-noir-950/0 group-hover:bg-noir-950/25 transition"></span>
+                </button>
+              </div>
+              <p class="mt-3 text-[12px] text-noir/45 tracking-[0.04em]"><i data-lucide="camera" class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5 text-or-dark"></i>Canopy du salon — maçonnerie terminée</p>
+            </div>
+          </div>
+
+          <!-- Onglet Vidéos -->
+          <div id="chantier-videos" class="hidden p-5 sm:p-6 grid sm:grid-cols-2 gap-5">
+            <button onclick="toast('Lecture vidéo simulée — maquette interactive','play')" class="group relative rounded-3xl overflow-hidden text-left">
+              <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop" alt="Visite guidée du chantier" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+              <span class="absolute inset-0 bg-noir-950/45"></span>
+              <span class="absolute inset-0 grid place-items-center">
+                <span class="w-14 h-14 rounded-full bg-creme-light/90 text-noir-900 grid place-items-center group-hover:bg-or transition">
+                  <i data-lucide="play" class="w-6 h-6 ml-0.5"></i>
+                </span>
+              </span>
+              <span class="absolute bottom-3 right-3 rounded-full bg-noir-950/70 backdrop-blur text-creme-light text-[11px] px-2.5 py-1 tracking-[0.1em]">2:14</span>
+              <span class="absolute bottom-3 left-4 text-creme-light text-[14px] tracking-[0.04em]">Visite guidée — Gros œuvre</span>
+            </button>
+            <button onclick="toast('Lecture vidéo simulée — maquette interactive','play')" class="group relative rounded-3xl overflow-hidden text-left">
+              <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1000&auto=format&fit=crop" alt="Time-lapse canopy" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">
+              <span class="absolute inset-0 bg-noir-950/45"></span>
+              <span class="absolute inset-0 grid place-items-center">
+                <span class="w-14 h-14 rounded-full bg-creme-light/90 text-noir-900 grid place-items-center group-hover:bg-or transition">
+                  <i data-lucide="play" class="w-6 h-6 ml-0.5"></i>
+                </span>
+              </span>
+              <span class="absolute bottom-3 right-3 rounded-full bg-noir-950/70 backdrop-blur text-creme-light text-[11px] px-2.5 py-1 tracking-[0.1em]">0:48</span>
+              <span class="absolute bottom-3 left-4 text-creme-light text-[14px] tracking-[0.04em]">Time-lapse — Canopy du salon</span>
+            </button>
+          </div>
+
+          <!-- Onglet Commentaires -->
+          <div id="chantier-comments" class="hidden">
+            <div id="chantier-comments-list" class="px-5 sm:px-6 py-5 space-y-5 max-h-96 overflow-y-auto thin-scroll"></div>
+            <div class="px-5 sm:px-6 py-4 border-t border-noir/5 bg-creme/50 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-noir-900 grid place-items-center shrink-0 overflow-hidden">
+                <img src="logo.png" alt="" class="w-[26px] h-[26px] object-contain" onerror="logoFallback(this)">
+              </div>
+              <input id="chantier-comment-input" type="text" placeholder="Poser une question sur le chantier…"
+                     class="flex-1 h-11 rounded-2xl bg-white border border-noir/10 px-4 text-[14px] placeholder-noir/30 focus:outline-none focus:border-or/60 transition"
+                     onkeydown="if(event.key==='Enter') addChantierComment()">
+              <button onclick="addChantierComment()" aria-label="Envoyer"
+                      class="w-11 h-11 rounded-2xl bg-noir-900 text-or grid place-items-center hover:bg-or hover:text-noir-900 transition active:scale-90 shrink-0">
+                <i data-lucide="send" class="w-[18px] h-[18px]"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ VUE 8 — DOCUMENTS & MÉDIAS ══════════ -->
+      <section id="view-documents" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Bibliothèque du projet</p>
+          <h1 class="font-display text-3xl text-noir-900">Documents</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Tous les documents du projet, classés par dossier. Ouvrez un dossier pour parcourir les fichiers.</p>
+        </div>
+
+        <!-- Barre d'actions -->
+        <div class="card-luxe p-5 mb-6 flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <span class="w-11 h-11 rounded-2xl bg-noir-900 text-or grid place-items-center shrink-0"><i data-lucide="folder" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[14px] font-medium text-noir-900">Espace documents — Villa Amelkis</p>
+              <p class="text-[11px] text-noir/45 tracking-[0.06em]">7 dossiers · 31 fichiers · 214 Mo</p>
+            </div>
+          </div>
+          <button onclick="downloadAll()"
+                  class="ml-auto inline-flex items-center gap-2.5 h-11 px-5 rounded-2xl bg-noir-900 text-creme-light text-[12px] font-medium tracking-[0.18em] uppercase hover:bg-or hover:text-noir-900 transition active:scale-95">
+            <i data-lucide="download" class="w-4 h-4"></i> Télécharger tout
+          </button>
+        </div>
+
+        <!-- Liste des dossiers (accordéon) -->
+        <div id="folders-list" class="space-y-4"></div>
+
+        <p class="mt-5 text-center text-[11px] text-noir/40 tracking-[0.06em]"><i data-lucide="lock" class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5"></i>Documents partagés par SB Interiors Marrakech — accessibles jusqu'à 12 mois après la livraison.</p>
+      </section>
+
+      <!-- ══════════ VUE 9 — MESSAGES ══════════ -->
+      <section id="view-messages" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Messagerie du projet</p>
+          <h1 class="font-display text-3xl text-noir-900">Messages</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Échangez directement avec l'équipe SB Interiors en charge de votre projet.</p>
+        </div>
+
+        <div class="card-luxe overflow-hidden">
+          <div class="grid lg:grid-cols-3 min-h-[520px]">
+
+            <!-- Liste des conversations -->
+            <div id="pane-list" class="lg:col-span-1 border-b lg:border-b-0 lg:border-r border-noir/5">
+              <div class="px-5 py-4 border-b border-noir/5">
+                <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50">Conversations</p>
+              </div>
+              <div id="threads-list" class="divide-y divide-noir/5"></div>
+            </div>
+
+            <!-- Fil de discussion -->
+            <div id="pane-chat" class="hidden lg:flex lg:col-span-2 flex-col">
+              <div class="flex items-center gap-3.5 px-5 py-4 border-b border-noir/5 bg-creme/40">
+                <button onclick="closeChat()" class="lg:hidden w-9 h-9 grid place-items-center rounded-xl border border-noir/10 text-noir/60 hover:border-or/60 transition">
+                  <i data-lucide="arrow-left" class="w-[18px] h-[18px]"></i>
+                </button>
+                <img id="chat-avatar" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&auto=format&fit=crop" alt="" class="w-10 h-10 rounded-full object-cover border border-or/40" onerror="imgFallback(this)">
+                <div class="min-w-0 flex-1">
+                  <p id="chat-name" class="text-[14px] font-medium text-noir-900 truncate">Sofia Bennani</p>
+                  <p id="chat-status" class="text-[11px] text-green-600 tracking-[0.08em] flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>En ligne</p>
+                </div>
+                <button onclick="toast('Appel audio simulé — maquette interactive','phone')" class="w-10 h-10 grid place-items-center rounded-xl border border-noir/10 text-noir/60 hover:border-or/60 hover:text-or-dark transition">
+                  <i data-lucide="phone" class="w-[17px] h-[17px]"></i>
+                </button>
+              </div>
+
+              <div id="chat-messages" class="flex-1 px-5 py-5 space-y-4 overflow-y-auto thin-scroll max-h-[440px]"></div>
+
+              <div class="px-5 py-4 border-t border-noir/5 bg-creme/50 flex items-center gap-3">
+                <input id="chat-input" type="text" placeholder="Écrire un message…"
+                       class="flex-1 h-11 rounded-2xl bg-white border border-noir/10 px-4 text-[14px] placeholder-noir/30 focus:outline-none focus:border-or/60 transition"
+                       onkeydown="if(event.key==='Enter') sendChat()">
+                <button onclick="sendChat()" aria-label="Envoyer"
+                        class="w-11 h-11 rounded-2xl bg-noir-900 text-or grid place-items-center hover:bg-or hover:text-noir-900 transition active:scale-90 shrink-0">
+                  <i data-lucide="send" class="w-[18px] h-[18px]"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ VUE 10 — PARAMÈTRES ══════════ -->
+      <section id="view-settings" class="view hidden">
+
+        <div class="hidden lg:block mb-7">
+          <p class="text-[10px] tracking-[0.32em] uppercase text-or-dark mb-2">Mon compte</p>
+          <h1 class="font-display text-3xl text-noir-900">Paramètres</h1>
+          <p class="text-noir/50 mt-1.5 text-[15px] font-light max-w-xl">Gérez votre profil, vos préférences de notification et votre accès à l'espace client.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-5 lg:gap-6">
+          <!-- Profil -->
+          <div class="card-luxe p-6">
+            <div class="flex items-center gap-5">
+              <img id="settings-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop" alt="Photo de profil" class="w-20 h-20 rounded-full object-cover border-2 border-or/50" onerror="imgFallback(this)">
+              <div class="min-w-0">
+                <p id="settings-name" class="font-display text-2xl text-noir-900 leading-tight">Sarah Benali</p>
+                <p id="settings-email" class="text-[13px] text-noir/50 mt-1 truncate">sarah.benali@email.com</p>
+                <span id="settings-role-badge" class="inline-flex mt-2.5 rounded-full bg-or/15 text-or-dark text-[10px] tracking-[0.18em] uppercase px-3.5 py-1">Cliente · Villa Amelkis</span>
+              </div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-3">
+              <button onclick="toast('Modification du profil simulée','user')" class="h-11 rounded-2xl border border-noir/10 text-[11px] tracking-[0.16em] uppercase text-noir/60 hover:border-or/60 hover:text-or-dark transition">Modifier le profil</button>
+              <button onclick="toast('Changement de photo simulé','camera')" class="h-11 rounded-2xl border border-noir/10 text-[11px] tracking-[0.16em] uppercase text-noir/60 hover:border-or/60 hover:text-or-dark transition">Changer la photo</button>
+            </div>
+          </div>
+
+          <!-- Fiche projet -->
+          <div class="card-luxe p-6">
+            <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 mb-5">Fiche projet</p>
+            <div class="space-y-4 text-[13px]">
+              <div class="flex justify-between gap-4"><span class="text-noir/45">Projet</span><span class="font-medium text-noir-900 text-right">Villa Amelkis</span></div>
+              <div class="flex justify-between gap-4"><span class="text-noir/45">Référence</span><span class="font-medium text-noir-900 text-right">SB-2026-014</span></div>
+              <div class="flex justify-between gap-4"><span class="text-noir/45">Adresse</span><span class="font-medium text-noir-900 text-right">Route de l'Ourika, Marrakech</span></div>
+              <div class="flex justify-between gap-4"><span class="text-noir/45">Architecte en charge</span><span class="font-medium text-noir-900 text-right">Sofia Bennani</span></div>
+              <div class="flex justify-between gap-4"><span class="text-noir/45">Livraison estimée</span><span class="font-medium text-or-dark text-right">Décembre 2026</span></div>
+            </div>
+          </div>
+
+          <!-- Préférences -->
+          <div class="card-luxe overflow-hidden">
+            <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 px-6 pt-5 pb-4">Préférences</p>
+            <div class="divide-y divide-noir/5">
+              <div class="flex items-center gap-4 px-6 py-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center shrink-0"><i data-lucide="bell" class="w-4 h-4"></i></span>
+                <div class="flex-1">
+                  <p class="text-[14px] text-noir-900">Notifications push</p>
+                  <p class="text-[11px] text-noir/45">Nouveaux rendus, documents et étapes</p>
+                </div>
+                <button onclick="toggleSetting(this,'Notifications push')" class="setting-toggle relative w-11 h-6 rounded-full bg-or transition-colors" aria-label="Basculer">
+                  <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow switch-dot" style="transform:translateX(20px)"></span>
+                </button>
+              </div>
+              <div class="flex items-center gap-4 px-6 py-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center shrink-0"><i data-lucide="mail" class="w-4 h-4"></i></span>
+                <div class="flex-1">
+                  <p class="text-[14px] text-noir-900">E-mails de suivi</p>
+                  <p class="text-[11px] text-noir/45">Rapport hebdomadaire du chantier</p>
+                </div>
+                <button onclick="toggleSetting(this,'E-mails de suivi')" class="setting-toggle relative w-11 h-6 rounded-full bg-or transition-colors" aria-label="Basculer">
+                  <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow switch-dot" style="transform:translateX(20px)"></span>
+                </button>
+              </div>
+              <div class="flex items-center gap-4 px-6 py-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center shrink-0"><i data-lucide="users" class="w-4 h-4"></i></span>
+                <div class="flex-1">
+                  <p class="text-[14px] text-noir-900">Partage famille</p>
+                  <p class="text-[11px] text-noir/45">Autoriser un proche à consulter l'espace</p>
+                </div>
+                <button onclick="toggleSetting(this,'Partage famille')" class="setting-toggle relative w-11 h-6 rounded-full bg-noir/15 transition-colors" aria-label="Basculer">
+                  <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow switch-dot"></span>
+                </button>
+              </div>
+              <div class="flex items-center gap-4 px-6 py-4">
+                <span class="w-9 h-9 rounded-xl bg-noir-900 text-or grid place-items-center shrink-0"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
+                <div class="flex-1">
+                  <p class="text-[14px] text-noir-900">Mode économie de données</p>
+                  <p class="text-[11px] text-noir/45">Charger les médias en qualité standard</p>
+                </div>
+                <button onclick="toggleSetting(this,'Mode économie de données')" class="setting-toggle relative w-11 h-6 rounded-full bg-noir/15 transition-colors" aria-label="Basculer">
+                  <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow switch-dot"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- À propos + déconnexion -->
+          <div class="card-luxe p-6 flex flex-col">
+            <p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 mb-5">À propos</p>
+            <div class="flex items-center gap-4 mb-5">
+              <span class="w-11 h-11 rounded-2xl bg-noir-900 border border-or/40 grid place-items-center shrink-0 overflow-hidden">
+                <img src="logo.png" alt="SB Interiors" class="w-8 h-8 object-contain" onerror="logoFallback(this)">
+              </span>
+              <div>
+                <p class="text-[14px] font-medium text-noir-900">Espace Client SB Interiors</p>
+                <p class="text-[11px] text-noir/45 tracking-[0.06em]">Version 2.4.0 · Maquette interactive</p>
+              </div>
+            </div>
+            <p class="text-[12px] text-noir/45 leading-relaxed flex-1">Cette démonstration ne stocke aucune donnée réelle : identifiants, messages et documents sont simulés dans votre navigateur. © 2026 SB Interiors Marrakech — Tous droits réservés.</p>
+            <button onclick="logout()"
+                    class="mt-6 w-full h-12 rounded-2xl bg-noir-900 text-creme-light text-[12px] font-medium tracking-[0.22em] uppercase inline-flex items-center justify-center gap-2.5 hover:bg-noir-700 transition active:scale-[0.98]">
+              <i data-lucide="log-out" class="w-4 h-4"></i> Se déconnecter
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ────────── NAVIGATION INFÉRIEURE (mobile) ────────── -->
+    <nav id="bottom-nav" class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-creme-light/95 backdrop-blur-md border-t border-noir/10 pb-[env(safe-area-inset-bottom)]">
+      <div class="grid grid-cols-3 max-w-md mx-auto">
+        <button data-bnav="dashboard" onclick="showView('dashboard')" class="bnav-item flex flex-col items-center gap-1 py-3 text-noir/40 transition">
+          <i data-lucide="home" class="w-[22px] h-[22px]"></i>
+          <span class="text-[10px] tracking-[0.14em] uppercase">Accueil</span>
+        </button>
+        <button data-bnav="messages" onclick="showView('messages')" class="bnav-item relative flex flex-col items-center gap-1 py-3 text-noir/40 transition">
+          <i data-lucide="message-circle" class="w-[22px] h-[22px]"></i>
+          <span class="text-[10px] tracking-[0.14em] uppercase">Messages</span>
+          <span id="bnav-msg-dot" class="absolute top-2 right-[calc(50%-18px)] w-2 h-2 rounded-full bg-or"></span>
+        </button>
+        <button data-bnav="settings" onclick="showView('settings')" class="bnav-item flex flex-col items-center gap-1 py-3 text-noir/40 transition">
+          <i data-lucide="settings" class="w-[22px] h-[22px]"></i>
+          <span class="text-[10px] tracking-[0.14em] uppercase">Paramètres</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div><!-- /#app -->
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- OVERLAYS & MODALES                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<!-- Bouton flottant Admin (ajout de mise à jour chantier) -->
+<button id="chantier-fab" onclick="openUpdateModal()" aria-label="Ajouter une mise à jour"
+        class="admin-only hidden fixed bottom-24 lg:bottom-8 right-5 z-40 w-14 h-14 rounded-full bg-noir-900 text-or grid place-items-center shadow-luxe border border-or/40 hover:bg-or hover:text-noir-900 transition active:scale-90">
+  <i data-lucide="plus" class="w-6 h-6"></i>
+</button>
+
+<!-- Modale plein écran 360° (simulation Kuula) -->
+<div id="modal-360" class="hidden fixed inset-0 z-[70] bg-noir-950">
+  <div class="absolute inset-0 overflow-hidden">
+    <img id="modal-360-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2400&auto=format&fit=crop" alt="Vue panoramique 360°"
+         class="w-full h-full object-cover panorama" draggable="false" onerror="imgFallback(this)">
+    <div class="absolute inset-0 bg-noir-950/35"></div>
+  </div>
+  <div class="absolute top-0 inset-x-0 z-10 flex items-center gap-3 p-5 bg-gradient-to-b from-noir-950/80 to-transparent">
+    <div>
+      <p id="modal-360-zone" class="text-[10px] tracking-[0.3em] uppercase text-or">Salon · Immersion</p>
+      <p id="modal-360-title" class="font-display text-2xl text-creme-light leading-tight">Salon — 42 m²</p>
+    </div>
+    <button onclick="close360()" aria-label="Fermer" class="ml-auto w-11 h-11 rounded-full bg-noir-950/60 backdrop-blur border border-white/20 text-creme-light grid place-items-center hover:bg-or hover:text-noir-900 transition active:scale-90">
+      <i data-lucide="x" class="w-5 h-5"></i>
+    </button>
+  </div>
+  <div class="absolute inset-0 grid place-items-center pointer-events-none">
+    <div class="text-center px-6">
+      <div class="mx-auto w-24 h-24 rounded-full border-2 border-dashed border-creme-light/60 ring-360 grid place-items-center mb-4">
+        <i data-lucide="rotate-3d" class="w-7 h-7 text-or"></i>
+      </div>
+      <p class="text-creme-light/90 text-[13px] tracking-[0.24em] uppercase">Glissez pour explorer</p>
+    </div>
+  </div>
+  <div class="absolute bottom-0 inset-x-0 z-10 flex items-center justify-center gap-2.5 p-5 bg-gradient-to-t from-noir-950/80 to-transparent">
+    <span class="rounded-full border border-white/15 bg-noir-950/60 backdrop-blur text-creme-light/80 text-[11px] tracking-[0.1em] px-4 py-2">Intégration Kuula simulée · Maquette</span>
+  </div>
+</div>
+
+<!-- Modale admin : nouvelle mise à jour chantier -->
+<div id="modal-update" class="hidden fixed inset-0 z-[70] bg-noir-950/70 backdrop-blur-sm grid place-items-center p-5">
+  <div class="card-luxe w-full max-w-md p-6 sm:p-7 bg-creme">
+    <div class="flex items-center gap-3.5 mb-5">
+      <span class="w-11 h-11 rounded-2xl bg-noir-900 text-or grid place-items-center"><i data-lucide="hard-hat" class="w-5 h-5"></i></span>
+      <div>
+        <p class="font-display text-xl text-noir-900 leading-tight">Nouvelle mise à jour</p>
+        <p class="text-[10px] tracking-[0.2em] uppercase text-or-dark">Suivi de chantier · Admin</p>
+      </div>
+      <button onclick="closeUpdateModal()" class="ml-auto w-9 h-9 grid place-items-center rounded-xl border border-noir/10 text-noir/50 hover:border-or/60 transition">
+        <i data-lucide="x" class="w-[18px] h-[18px]"></i>
+      </button>
+    </div>
+    <label class="block text-[11px] tracking-[0.18em] uppercase text-noir/50 mb-2">Message publié côté client</label>
+    <textarea id="update-text" rows="4" placeholder="Ex. : Pose des gaines électriques terminée dans la cuisine…"
+              class="w-full rounded-2xl border border-noir/10 bg-white px-4 py-3.5 text-[14px] placeholder-noir/30 focus:outline-none focus:border-or/60 transition resize-none"></textarea>
+    <button onclick="publishUpdate()"
+            class="mt-5 w-full h-12 rounded-2xl bg-noir-900 text-creme-light text-[12px] font-medium tracking-[0.22em] uppercase inline-flex items-center justify-center gap-2.5 hover:bg-or hover:text-noir-900 transition active:scale-[0.98]">
+      <i data-lucide="send" class="w-4 h-4"></i> Publier la mise à jour
+    </button>
+  </div>
+</div>
+
+<!-- Écran d'accès bloqué (mode admin) -->
+<div id="blocked-screen" class="hidden fixed inset-0 z-[80] bg-noir-950/95 backdrop-blur-md grid place-items-center p-5">
+  <div class="text-center max-w-sm w-full">
+    <div class="mx-auto w-20 h-20 rounded-full border border-or/50 bg-noir-900 grid place-items-center mb-6">
+      <i data-lucide="lock" class="w-8 h-8 text-or"></i>
+    </div>
+    <h2 class="font-display text-3xl text-creme-light leading-tight">Accès temporairement restreint</h2>
+    <p class="mt-4 text-[14px] text-creme/60 leading-relaxed font-light">Votre espace client est momentanément verrouillé par l'agence, probablement pendant une mise à jour de votre projet. Votre architecte vous recontactera très rapidement pour vous accompagner.</p>
+    <div class="mt-8 space-y-3">
+      <button onclick="toast('Votre demande a été transmise à l\'agence (simulé).','mail')" class="w-full h-12 rounded-2xl bg-or text-noir-900 text-[12px] font-medium tracking-[0.22em] uppercase hover:bg-or-light transition active:scale-[0.98]">Contacter l'agence</button>
+      <button onclick="backToLoginFromBlock()" class="w-full h-12 rounded-2xl border border-white/15 text-creme/70 text-[12px] font-medium tracking-[0.22em] uppercase hover:border-or/60 hover:text-or transition active:scale-[0.98]">Retour à la connexion</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de notification -->
+<div id="toast" class="toast-hide fixed left-1/2 -translate-x-1/2 bottom-24 lg:bottom-8 z-[90] flex items-center gap-3 rounded-2xl border border-or/35 bg-noir-900 text-creme-light px-5 py-3.5 shadow-luxe max-w-[calc(100vw-2.5rem)]">
+  <span class="text-or shrink-0"><i id="toast-icon" data-lucide="check" class="w-5 h-5"></i></span>
+  <span id="toast-msg" class="text-[13px] tracking-[0.04em]"></span>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   SB INTERIORS MARRAKECH — Maquette interactive
+   Moteur Vanilla JS · Aucun backend · Données 100% simulées
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Utilitaires ── */
+const $  = (sel, ctx) => (ctx || document).querySelector(sel);
+const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
+
+function refreshIcons(){ if (window.lucide && lucide.createIcons) lucide.createIcons(); }
+function esc(t){ const d = document.createElement('div'); d.textContent = (t == null) ? '' : String(t); return d.innerHTML; }
+
+/* ── État global de la maquette ── */
+const state = {
+  role: 'client',            // 'client' | 'admin'
+  adminMode: false,
+  blocked: false,
+  progress: 68,
+  view: 'dashboard',
+  moodRoom: 'salon',
+  validated: {},
+  renderRoom: 'salon',
+  renderIndex: 0,
+  zone: 'salon',
+  floor: 'rdc',
+  zoom: 1,
+  chantierTab: 'photos',
+  thread: 'sofia',
+  chatOpen: false,
+  notifRead: false,
+  openFolder: -1,
+  replyTimer: null
+};
+
+/* ── Avatars & médias ── */
+const AVATARS = {
+  sarah: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop',
+  sofia: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=300&auto=format&fit=crop',
+  mehdi: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop'
+};
+/* Logo officiel de l'agence — PNG transparent 1:1 (même dossier que index.html).
+   Les avatars photos sont en object-cover ; le logo doré, lui, exige un
+   fond sombre et un léger retrait : c'est le rôle de avatarCls(). */
+const LOGO_SRC = 'logo.png';
+function avatarCls(src){
+  return src === LOGO_SRC ? 'object-contain bg-noir-900 p-[5px]' : 'object-cover';
+}
+
+const IMG = {
+  marbleLight: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=800&auto=format&fit=crop',
+  marbleDark:  'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?q=80&w=800&auto=format&fit=crop',
+  wood:        'https://images.unsplash.com/photo-1509718443690-d8e2fb3474b7?q=80&w=800&auto=format&fit=crop',
+  fabric:      'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=800&auto=format&fit=crop'
+};
+
+const ROOM_NAMES = { salon: 'Salon', cuisine: 'Cuisine', chambre: 'Chambre', sdb: 'Salle de bain' };
+
+/* ── Moodboards ── */
+const MOODBOARDS = {
+  salon: {
+    title: 'Salon — Ambiance douce & minérale',
+    img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop',
+    desc: "Ce moodboard réunit des matières brutes et nobles autour d'une lumière chaude, typique des villas contemporaines de Marrakech. Le plâtre lissé du canopy, le travertin du sol et le noyer massif créent un équilibre entre authenticité et modernité, tandis que le lin lavé adoucit l'ensemble. Des touches de laiton et de zellige captent la lumière du soir, en écho discret aux lanternes de la médina.",
+    colors: [
+      { hex:'#F5F2EB', name:'Crème' }, { hex:'#D9CBB2', name:'Sable' }, { hex:'#9CAF88', name:'Vert sauge' },
+      { hex:'#8B7355', name:'Taupe' }, { hex:'#5C4033', name:'Brun noyer' }
+    ],
+    materials: [
+      { img:IMG.marbleLight, name:'Marbre Calacatta', ref:'MC-024', type:'Pierre' },
+      { img:IMG.wood,        name:'Bois de noyer',    ref:'BN-118', type:'Bois' },
+      { img:IMG.fabric,      name:'Lin lavé',         ref:'LN-302', type:'Tissu' }
+    ],
+    chips: [ { hex:'#1F5F4B', name:'Zellige émeraude' }, { hex:'#C5A880', name:'Laiton brossé', metal:true } ]
+  },
+  cuisine: {
+    title: 'Cuisine — Contemporaine & chaleureuse',
+    img: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=1600&auto=format&fit=crop',
+    desc: "La cuisine s'organise autour d'un îlot massif en marbre Calacatta, véritable pièce de sculpture au centre de la pièce. Les façades en chêne huilé apportent de la profondeur, réhaussées par une crédence en zellige vert sauge posée à la main. La robinetterie laiton et l'éclairage linéaire sous les meubles hauts soulignent l'esprit atelier chic de l'ensemble.",
+    colors: [
+      { hex:'#F2F0EA', name:'Blanc calacatta' }, { hex:'#9CAF88', name:'Vert sauge' }, { hex:'#6B4F3A', name:'Noyer' },
+      { hex:'#C5A880', name:'Laiton' }, { hex:'#35322E', name:'Anthracite' }
+    ],
+    materials: [
+      { img:IMG.marbleLight, name:'Marbre Calacatta', ref:'MC-024', type:'Pierre' },
+      { img:IMG.wood,        name:'Chêne huilé',      ref:'CN-206', type:'Bois' },
+      { img:IMG.fabric,      name:'Lin naturel',      ref:'LN-118', type:'Tissu' }
+    ],
+    chips: [ { hex:'#C5A880', name:'Finition laiton', metal:true }, { hex:'#7A5433', name:'Poignées cuir' } ]
+  },
+  chambre: {
+    title: 'Chambre — Cocon de lin & terre',
+    img: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1600&auto=format&fit=crop',
+    desc: "La suite parentale se déploie dans des tonalités de lin lavé et de sable, propices au repos. La tête de lit en terre cuite talochée et les plaids en laine bouclée habillent l'espace de matières apaisantes, sans surcharge ornementale. Un tapis berbère tissé main et des appliques en laiton patiné complètent cette atmosphère de retraite douce, à deux pas de la palmeraie.",
+    colors: [
+      { hex:'#EFE6D8', name:'Lin lavé' }, { hex:'#D9CBB2', name:'Sable' }, { hex:'#C97B5A', name:'Terracotta' },
+      { hex:'#A88B60', name:'Brun clair' }, { hex:'#FAF8F5', name:'Blanc cassé' }
+    ],
+    materials: [
+      { img:IMG.fabric,     name:'Lin lavé',           ref:'LN-302', type:'Tissu' },
+      { img:IMG.wood,       name:'Bois de chêne',      ref:'CN-206', type:'Bois' },
+      { img:IMG.marbleDark, name:'Pierre de Bourgogne', ref:'PB-057', type:'Pierre' }
+    ],
+    chips: [ { hex:'#EFE6D8', name:'Tapis berbère' }, { hex:'#C5A880', name:'Laiton patiné', metal:true } ]
+  },
+  sdb: {
+    title: 'Salle de bain — Spa minéral',
+    img: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop',
+    desc: "Inspirée des hammams contemporains, cette salle de bain marie le marbre Thassos et la pierre dans une grammaire épurée. La douche à l'italienne s'ouvre sur un miroir cintré aux montants laiton, tandis que le teck massif réchauffe le sol au réveil. La lumière zénithale tamisée transforme chaque routine en moment de spa privé.",
+    colors: [
+      { hex:'#F2F0EA', name:'Marbre blanc' }, { hex:'#A3B9A9', name:'Vert d\u2019eau' }, { hex:'#35322E', name:'Charbon' },
+      { hex:'#C5A880', name:'Laiton' }, { hex:'#E8E3D9', name:'Beige pierre' }
+    ],
+    materials: [
+      { img:IMG.marbleDark, name:'Marbre Thassos', ref:'MT-011', type:'Pierre' },
+      { img:IMG.wood,       name:'Teck massif',    ref:'TM-089', type:'Bois' },
+      { img:IMG.fabric,     name:'Coton éponge',   ref:'CE-052', type:'Tissu' }
+    ],
+    chips: [ { hex:'#C5A880', name:'Robinetterie laiton', metal:true }, { hex:'#A3B9A9', name:'Vert d\u2019eau' } ]
+  }
+};
+
+/* ── Rendus 3D ── */
+const RENDERS = {
+  salon: [
+    { src:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop', title:'Salon — Vue principale' },
+    { src:'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?q=80&w=1600&auto=format&fit=crop', title:'Salon — Espace canapé' },
+    { src:'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?q=80&w=1600&auto=format&fit=crop', title:'Salon — Ambiance du soir' }
+  ],
+  cuisine: [
+    { src:'https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=1600&auto=format&fit=crop', title:'Cuisine — Vue d\u2019ensemble' },
+    { src:'https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1600&auto=format&fit=crop', title:'Cuisine — Îlot central' },
+    { src:'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=1600&auto=format&fit=crop', title:'Cuisine — Plan de travail' }
+  ],
+  chambre: [
+    { src:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1600&auto=format&fit=crop', title:'Chambre — Vue principale' },
+    { src:'https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=1600&auto=format&fit=crop', title:'Chambre — Coin lecture' },
+    { src:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=1600&auto=format&fit=crop', title:'Chambre — Ambiance zen' }
+  ],
+  sdb: [
+    { src:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop', title:'Salle de bain — Vue douche' },
+    { src:'https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=1600&auto=format&fit=crop', title:'Salle de bain — Double vasque' },
+    { src:'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1600&auto=format&fit=crop', title:'Salle de bain — Détail marbre' }
+  ]
+};
+
+const RENDER_COMMENTS = {
+  salon: [
+    { author:'Sofia Bennani', role:'Architecte — SB Interiors', time:'12 oct. 2026', me:false, text:'Bonjour Sarah, voici le rendu du salon avec la nouvelle proposition de canopy en plâtre lissé. Nous avons conservé la palette minérale validée ensemble lors de notre dernier atelier.' },
+    { author:'Sarah Benali', role:'Cliente', time:'13 oct. 2026', me:true, text:'Superbe ! Peut-on visualiser une variante avec le canapé en lin clair et la table basse en travertin ?' }
+  ],
+  cuisine: [
+    { author:'Sofia Bennani', role:'Architecte — SB Interiors', time:'8 oct. 2026', me:false, text:'L\u2019îlot en Calacatta est positionné au centre pour fluidifier la circulation vers la salle à manger. La crédence en zellige arrive la semaine prochaine.' },
+    { author:'Sarah Benali', role:'Cliente', time:'9 oct. 2026', me:true, text:'J\u2019adore la luminosité de cette vue. Le laiton sera-t-il visible sur les poignées ?' }
+  ],
+  chambre: [
+    { author:'Sofia Bennani', role:'Architecte — SB Interiors', time:'5 oct. 2026', me:false, text:'Voici la suite parentale orientée est, avec la tête de lit en terre cuite talochée. Les appliques en laiton patiné sont posées à 1,60 m du sol.' }
+  ],
+  sdb: [
+    { author:'Mehdi Ouali', role:'Chef de chantier — SB Interiors', time:'1 oct. 2026', me:false, text:'La robinetterie laiton commandée chez notre artisan de Fès a été livrée. Le montage est prévu après la pose du marbre Thassos.' }
+  ]
+};
+
+/* ── Visite 360° ── */
+const TOUR = {
+  salon:     { src:'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2000&auto=format&fit=crop', zone:'Salon · Immersion',     short:'Salon',      title:'Salon — 42 m²' },
+  cuisine:   { src:'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop', zone:'Cuisine · Immersion',   short:'Cuisine',    title:'Cuisine — 18 m²' },
+  chambre:   { src:'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2000&auto=format&fit=crop', zone:'Chambre · Immersion',   short:'Chambre',    title:'Chambre parentale — 26 m²' },
+  exterieur: { src:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop', zone:'Extérieur · Immersion', short:'Extérieur',  title:'Patio & piscine — 210 m²' }
+};
+
+/* ── Chantier ── */
+let STEPS = [
+  { name:'Démolition',             desc:'Abattage des cloisons & évacuation',        dates:'12 – 25 janvier 2026',            status:'done' },
+  { name:'Gros œuvre',             desc:'Maçonnerie, canopy & dalle béton',          dates:'26 janvier – 15 avril 2026',      status:'done' },
+  { name:'Électricité',            desc:'Gaines, tableau & réseaux domestiques',     dates:'En cours depuis le 12 oct. 2026', status:'current' },
+  { name:'Peinture',               desc:'Enduits, tadelakt & finitions colorées',    dates:'Prévu en novembre 2026',          status:'todo' },
+  { name:'Mobilier & décoration',  desc:'Meubles sur mesure & dressage final',       dates:'Prévu en décembre 2026',          status:'todo' }
+];
+const STATUS_META = {
+  done:    { label:'Terminée', dot:'bg-green-500 text-white',            badge:'bg-green-600/10 text-green-700', line:'bg-green-500/50', icon:'check' },
+  current: { label:'En cours', dot:'bg-or text-noir-900 dot-current',     badge:'bg-or/20 text-or-dark',           line:'bg-or/40',        icon:'clock' },
+  todo:    { label:'À venir',  dot:'bg-noir/15 text-noir/40',             badge:'bg-noir/5 text-noir/45',          line:'bg-noir/10',      icon:'circle' }
+};
+
+let CHANTIER_COMMENTS = [
+  { author:'Mehdi Ouali', role:'Chef de chantier', me:false, time:'12 oct. 2026', text:'Les gaines électriques du salon seront terminées jeudi. Prochaine étape : le tableau électrique principal au cellier.' },
+  { author:'Sarah Benali', role:'Cliente', me:true, time:'13 oct. 2026', text:'Merci Mehdi ! La ventilation de la salle de bain principale sera-t-elle installée dans la foulée ?' }
+];
+
+/* ── Documents ── */
+const DOCS = [
+  { name:'Contrats & devis', icon:'file-text', files:[
+    { n:'Contrat de mission.pdf', s:'420 Ko' }, { n:'Devis general V3.pdf', s:'310 Ko' }, { n:'Avenant canopy.pdf', s:'180 Ko' },
+    { n:'Devis electricite.pdf', s:'95 Ko' }, { n:'Devis plomberie.pdf', s:'90 Ko' } ] },
+  { name:'Plans', icon:'pencil-ruler', files:[
+    { n:'Plan - Amenagement RDC.pdf', s:'1,2 Mo' }, { n:'Plan - Etage.pdf', s:'980 Ko' }, { n:'Plan - Exterieur.pdf', s:'860 Ko' } ] },
+  { name:'Moodboards', icon:'palette', files:[
+    { n:'Moodboard - Salon.pdf', s:'6,4 Mo' }, { n:'Moodboard - Cuisine.pdf', s:'5,1 Mo' },
+    { n:'Moodboard - Chambre.pdf', s:'4,7 Mo' }, { n:'Nuanciers matieres.pdf', s:'2,2 Mo' } ] },
+  { name:'Rendus 3D', icon:'box', files:[
+    { n:'Rendu - Salon HD.jpg', s:'8,2 Mo' }, { n:'Rendu - Salon soir.jpg', s:'7,8 Mo' }, { n:'Rendu - Cuisine.jpg', s:'6,9 Mo' },
+    { n:'Rendu - Chambre.jpg', s:'7,4 Mo' }, { n:'Rendu - Salle de bain.jpg', s:'6,1 Mo' }, { n:'Pack - Tous les rendus.zip', s:'42 Mo' } ] },
+  { name:'Suivi de chantier', icon:'hard-hat', files:[
+    { n:'Rapport semaine 38.pdf', s:'340 Ko' }, { n:'Rapport semaine 39.pdf', s:'360 Ko' }, { n:'Rapport semaine 40.pdf', s:'310 Ko' },
+    { n:'Planning previsionnel.pdf', s:'520 Ko' }, { n:'Photos - Septembre.zip', s:'88 Mo' },
+    { n:'Photos - Octobre.zip', s:'54 Mo' }, { n:'Visite guidee.mp4', s:'120 Mo' }, { n:'Time-lapse canopy.mp4', s:'36 Mo' } ] },
+  { name:'Factures', icon:'file-text', files:[
+    { n:'Facture acompte 1.pdf', s:'120 Ko' }, { n:'Facture acompte 2.pdf', s:'130 Ko' }, { n:'Releve TVA.pdf', s:'80 Ko' } ] },
+  { name:'Autres documents', icon:'folder', files:[
+    { n:'Notice entretien materiaux.pdf', s:'2,1 Mo' }, { n:'Garanties et assurances.pdf', s:'900 Ko' } ] }
+];
+
+/* ── Messagerie ── */
+const THREADS = {
+  sofia: {
+    name:'Sofia Bennani', avatar:AVATARS.sofia, status:'En ligne', unread:2,
+    messages: [
+      { from:'them', text:'Bonjour Sarah, la maçonnerie du canopy du salon est terminée. Le rendu 3D actualisé arrive très vite dans votre espace !', time:'09:24' },
+      { from:'me',   text:'Magnifique ! À quand la prochaine visite sur site ?', time:'09:31' },
+      { from:'them', text:'Je vous propose jeudi prochain à 10h — Mehdi vous fera visiter les gaines électriques du rez-de-chaussée.', time:'09:32' }
+    ],
+    replies: [ 'Parfait, je note la visite dans votre agenda partagé.', 'Merci pour votre retour, je transmets immédiatement à l\u2019équipe.', 'Bien noté ! Je vous confirme cela avant ce soir.' ], replyIdx:0
+  },
+  mehdi: {
+    name:'Mehdi Ouali', avatar:AVATARS.mehdi, status:'Vu il y a 2 h', unread:0,
+    messages: [
+      { from:'them', text:'Bonjour Mme Benali, les artisans du tadelakt arrivent lundi matin. Pensez à valider la teinte finale dans votre moodboard.', time:'Hier' },
+      { from:'me',   text:'C\u2019est noté, je regarde le nuancier ce soir et je vous confirme.', time:'Hier' }
+    ],
+    replies: [ 'Très bien, je bloque la teinte dès votre validation.', 'Entendu, je fais préparer les échantillons sur place.', 'Parfait, je vous envoie une photo du rendu réel dès lundi.' ], replyIdx:0
+  },
+  support: {
+    name:'SB Interiors — Support', avatar:LOGO_SRC, status:'Répond sous 24 h', unread:0,
+    messages: [
+      { from:'them', text:'Bienvenue dans votre espace client privé, Mme Benali. Pour toute question technique, répondez directement dans cette conversation.', time:'Lun' }
+    ],
+    replies: [ 'Merci pour votre message, un conseiller vous répond très rapidement.', 'Nous avons bien reçu votre demande et la transmettons à votre architecte.' ], replyIdx:0
+  }
+};
+
+/* ═══════════════ TOAST & DIVERS ═══════════════ */
+let toastTimer = null;
+function toast(msg, icon){
+  const el = $('#toast');
+  el.innerHTML = '<span class="text-or shrink-0"><i data-lucide="' + (icon || 'check') + '" class="w-5 h-5"></i></span><span id="toast-msg" class="text-[13px] tracking-[0.04em]">' + esc(msg) + '</span>';
+  refreshIcons();
+  el.classList.remove('toast-hide');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.add('toast-hide'); }, 2800);
+}
+
+function togglePassword(){
+  const input = $('#login-password');
+  input.type = (input.type === 'password') ? 'text' : 'password';
+}
+
+function toggleSetting(btn, label){
+  const dot = btn.querySelector('.toggle-dot');
+  const on = btn.classList.toggle('bg-or');
+  btn.classList.toggle('bg-noir/15', !on);
+  dot.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+  toast(on ? ('Préférence activée — ' + label) : ('Préférence désactivée — ' + label), 'settings');
+}
+
+function downloadFile(name){ toast('Téléchargement simulé — ' + name, 'download'); }
+function downloadAll(){ toast('Préparation de l\u2019archive ZIP simulée · 31 fichiers · 214 Mo', 'download'); }
+
+/* ═══════════════ CONNEXION / DÉCONNEXION ═══════════════ */
+function loginApple(){ toast('Connexion Apple simulée — bienvenue !', 'check'); login('client'); }
+
+function login(role){
+  state.role = role;
+  /* Accès client bloqué par l'administrateur */
+  if (role === 'client' && state.blocked){
+    $('#view-login').classList.add('hidden');
+    $('#blocked-screen').classList.remove('hidden');
+    refreshIcons();
+    return;
+  }
+  state.adminMode = (role === 'admin');
+  applyIdentity();
+  applyAdminVisibility();
+  $('#view-login').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  showView('dashboard');
+  toast(role === 'admin' ? 'Bienvenue Sofia — mode administrateur actif' : 'Bienvenue Sarah, heureuse de vous revoir', 'sparkles');
+}
+
+function logout(){
+  state.role = 'client';
+  state.adminMode = false;
+  applyAdminVisibility();
+  $('#app').classList.add('hidden');
+  $('#blocked-screen').classList.add('hidden');
+  $('#view-login').classList.remove('hidden');
+  window.scrollTo(0, 0);
+  toast('Vous êtes déconnecté(e). À bientôt !', 'log-out');
+}
+function backToLoginFromBlock(){ logout(); }
+
+function applyIdentity(){
+  const admin = (state.role === 'admin');
+  const name  = admin ? 'Sofia' : 'Sarah';
+  const full  = admin ? 'Sofia Bennani' : 'Sarah Benali';
+  const email = admin ? 'sofia@sbinteriors.ma' : 'sarah.benali@email.com';
+  const roleLbl= admin ? 'Administratrice · SB Interiors' : 'Cliente · Villa Amelkis';
+  $('#greeting-name').textContent = name;
+  $('#sidebar-name').textContent = full;
+  $('#sidebar-role').textContent = roleLbl;
+  $('#sidebar-avatar').src = admin ? AVATARS.sofia : AVATARS.sarah;
+  $('#header-avatar').src  = admin ? AVATARS.sofia : AVATARS.sarah;
+  $('#settings-avatar').src = admin ? AVATARS.sofia : AVATARS.sarah;
+  $('#settings-name').textContent = full;
+  $('#settings-email').textContent = email;
+  $('#settings-role-badge').textContent = roleLbl;
+  $('#comment-avatar').textContent = admin ? 'SB' : 'S';
+  $('#header-admin').classList.toggle('hidden', !admin);
+  $('#header-admin').classList.toggle('flex', admin);
+}
+
+/* ═══════════════ NAVIGATION SPA ═══════════════ */
+const VIEW_TITLES = {
+  moodboards: { t:'Moodboards',        s:'Matériaux & inspirations' },
+  rendus:     { t:'Rendus 3D',         s:'Visualisations HD' },
+  visite360:  { t:'Visite 360°',       s:'Immersion virtuelle' },
+  plans:      { t:'Plans 2D/3D',       s:"Plans d'architecte" },
+  chantier:   { t:'Suivi de chantier', s:'Avancement & étapes' },
+  documents:  { t:'Documents',         s:'Médias & fichiers' }
+};
+
+function showView(name){
+  state.view = name;
+  $$('.view').forEach(function(v){ v.classList.add('hidden'); });
+  const el = $('#view-' + name);
+  if (el) el.classList.remove('hidden');
+
+  updateHeader(name);
+  updateNavActive(name);
+
+  const isMain = (VIEW_TITLES[name] === undefined);
+  $('#bottom-nav').classList.toggle('hidden', !isMain);
+  updateFab();
+  closeNotifPanel();
+  window.scrollTo(0, 0);
+  refreshIcons();
+}
+
+function goBack(){ showView('dashboard'); }
+
+function updateHeader(name){
+  const t = VIEW_TITLES[name];
+  const isDetail = !!t;
+  $('#btn-back').classList.toggle('hidden', !isDetail);
+  $('#header-title').classList.toggle('hidden', !isDetail);
+  $('#header-logo').classList.toggle('hidden', isDetail);
+  $('#header-spacer-mobile').classList.toggle('hidden', isDetail);
+  if (t){
+    $('#header-title-main').textContent = t.t;
+    $('#header-title-sub').textContent  = t.s;
+  }
+}
+
+function updateNavActive(name){
+  $$('#sidebar-nav .nav-item').forEach(function(b){
+    const on = b.getAttribute('data-nav') === name;
+    b.classList.toggle('bg-or/10', on);
+    b.classList.toggle('text-or', on);
+    b.classList.toggle('text-creme/70', !on);
+  });
+  $$('#bottom-nav .bnav-item').forEach(function(b){
+    const on = b.getAttribute('data-bnav') === name;
+    b.classList.toggle('text-or-dark', on);
+    b.classList.toggle('text-noir/40', !on);
+  });
+}
+
+function setActivePill(containerId, attr, activeKey){
+  $$('#' + containerId + ' button[data-' + attr + ']').forEach(function(b){
+    const on = b.getAttribute('data-' + attr) === activeKey;
+    b.setAttribute('class', 'pill shrink-0 rounded-full px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase ' +
+      (on ? 'bg-noir-900 text-creme-light shadow-soft' : 'bg-white text-noir/60 border border-noir/10 hover:border-or/60 hover:text-noir transition'));
+  });
+}
+
+/* ═══════════════ NOTIFICATIONS ═══════════════ */
+function toggleNotifPanel(e){
+  if (e) e.stopPropagation();
+  $('#notif-panel').classList.toggle('hidden');
+  refreshIcons();
+}
+function closeNotifPanel(){ const p = $('#notif-panel'); if (p) p.classList.add('hidden'); }
+function markNotifRead(){
+  state.notifRead = true;
+  $('#notif-badge').classList.add('hidden');
+  $$('.notif-item').forEach(function(n){ n.classList.add('opacity-60'); });
+  closeNotifPanel();
+  toast('Notifications marquées comme lues', 'check');
+}
+document.addEventListener('click', function(e){
+  if (!e.target.closest('#notif-wrap')) closeNotifPanel();
+});
+
+/* ═══════════════ MODE ADMINISTRATEUR ═══════════════ */
+function toggleAdminMode(on){
+  state.adminMode = !!on;
+  applyAdminVisibility();
+  toast(on ? 'Vue administrateur activée — contrôles disponibles' : 'Vue administrateur désactivée', 'shield');
+}
+
+function applyAdminVisibility(){
+  $$('.admin-only').forEach(function(el){ el.classList.toggle('hidden', !state.adminMode); });
+  const sw = $('#admin-switch'); if (sw) sw.checked = state.adminMode;
+  updateFab();
+  refreshIcons();
+}
+
+function updateFab(){
+  const fab = $('#chantier-fab'); if (!fab) return;
+  fab.classList.toggle('hidden', !(state.adminMode && state.view === 'chantier'));
+}
+
+function setProgress(v){
+  state.progress = Math.max(0, Math.min(100, parseInt(v, 10) || 0));
+  updateProgressUI();
+}
+
+function updateProgressUI(){
+  const p = state.progress;
+  $('#dash-progress-pct').textContent = p;
+  $('#dash-progress-bar').style.width = p + '%';
+  $('#chantier-progress-pct').textContent = p;
+  $('#chantier-progress-bar').style.width = p + '%';
+  $('#admin-progress-val').textContent = p;
+  const slider = $('#admin-progress-slider');
+  if (slider){
+    slider.value = p;
+    slider.style.setProperty('--fill', p + '%');
+  }
+}
+
+function updatePhasesStat(){
+  const done = STEPS.filter(function(s){ return s.status === 'done'; }).length;
+  $('#stat-phases').textContent = done + '/' + STEPS.length;
+}
+
+function cycleStep(i){
+  const order = ['done', 'current', 'todo'];
+  const cur = order.indexOf(STEPS[i].status);
+  STEPS[i].status = order[(cur + 1) % order.length];
+  renderSteps();
+  toast('Étape « ' + STEPS[i].name + ' » — ' + STATUS_META[STEPS[i].status].label, 'refresh-cw');
+}
+
+function toggleBlockClient(){
+  state.blocked = !state.blocked;
+  const btn = $('#block-btn');
+  const icon = state.blocked ? 'lock' : 'check';
+  btn.innerHTML = '<i data-lucide="' + icon + '" class="w-4 h-4"></i><span id="block-btn-label">' +
+    (state.blocked ? "Débloquer l'accès client" : "Bloquer l'accès client") + '</span>';
+  btn.className = 'w-full inline-flex items-center justify-center gap-2.5 h-12 rounded-2xl text-[12px] font-medium tracking-[0.2em] uppercase transition active:scale-[0.98] ' +
+    (state.blocked ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-noir-900 text-creme-light hover:bg-noir-700');
+  refreshIcons();
+  toast(state.blocked
+    ? "Accès client bloqué — Sarah verra l'écran de restriction à sa prochaine connexion"
+    : 'Accès client rétabli — Sarah peut de nouveau consulter son espace', 'shield');
+}
+
+/* ═══════════════ MOODBOARDS & MATÉRIAUX ═══════════════ */
+function filterMoodboard(room){
+  state.moodRoom = room;
+  setActivePill('mood-filters', 'room', room);
+  renderMoodboard();
+}
+
+function renderMoodboard(){
+  const m = MOODBOARDS[state.moodRoom];
+  $('#moodboard-content').innerHTML =
+    '<div class="relative rounded-3xl overflow-hidden shadow-luxe">' +
+      '<img src="' + m.img + '" alt="' + esc(m.title) + '" class="w-full h-64 sm:h-80 lg:h-96 object-cover" onerror="imgFallback(this)">' +
+      '<div class="absolute inset-0 bg-gradient-to-t from-noir-950/75 via-noir-950/10 to-transparent"></div>' +
+      '<div class="absolute bottom-0 inset-x-0 p-5 sm:p-7">' +
+        '<p class="text-[10px] tracking-[0.3em] uppercase text-or mb-2">Ambiance & inspiration</p>' +
+        '<h3 class="font-display text-2xl sm:text-3xl text-creme-light leading-tight">' + esc(m.title) + '</h3>' +
+      '</div>' +
+    '</div>' +
+    '<p class="mt-6 text-[15px] text-noir/70 leading-relaxed font-light">' + esc(m.desc) + '</p>' +
+    '<div class="mt-8">' +
+      '<p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 mb-5">Palette de couleurs</p>' +
+      '<div class="flex flex-wrap gap-x-7 gap-y-5">' +
+        m.colors.map(function(c){
+          return '<div class="text-center">' +
+            '<div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full ring-2 ring-white shadow-soft border border-noir/10" style="background:' + c.hex + '"></div>' +
+            '<p class="text-[11px] text-noir/60 mt-2.5">' + esc(c.name) + '</p>' +
+            '<p class="text-[10px] text-noir/35 tracking-[0.06em]">' + c.hex + '</p>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+    '</div>' +
+    '<div class="mt-8">' +
+      '<p class="text-[11px] tracking-[0.26em] uppercase text-noir/50 mb-5">Matériaux sélectionnés</p>' +
+      '<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">' +
+        m.materials.map(function(mat){
+          return '<div class="card-luxe overflow-hidden group cursor-pointer transition hover:border-or/40" onclick="toast(\'Fiche matériau simulée — ' + esc(mat.name) + ' · Réf. ' + mat.ref + '\',\'sparkles\')">' +
+            '<div class="h-28 sm:h-32 overflow-hidden">' +
+              '<img src="' + mat.img + '" alt="' + esc(mat.name) + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="imgFallback(this)">' +
+            '</div>' +
+            '<div class="p-4">' +
+              '<p class="text-[14px] font-medium text-noir-900">' + esc(mat.name) + '</p>' +
+              '<p class="text-[11px] text-noir/45 mt-0.5">Réf. ' + mat.ref + '</p>' +
+              '<span class="inline-flex mt-2.5 rounded-full bg-noir-900 text-or text-[9px] tracking-[0.18em] uppercase px-3 py-1">' + mat.type + '</span>' +
+            '</div>' +
+          '</div>';
+        }).join('') +
+        m.chips.map(function(ch){
+          const bg = ch.metal ? 'linear-gradient(135deg,#E9D6AC,#C5A880,#8F7248)' : ch.hex;
+          return '<div class="card-luxe p-4 flex items-center gap-4 cursor-pointer transition hover:border-or/40" onclick="toast(\'Échantillon ' + esc(ch.name) + ' — demande simulée\',\'sparkles\')">' +
+            '<div class="w-16 h-16 rounded-2xl shadow-soft border border-noir/10 shrink-0" style="background:' + bg + '"></div>' +
+            '<div class="min-w-0">' +
+              '<p class="text-[14px] font-medium text-noir-900">' + esc(ch.name) + '</p>' +
+              '<p class="text-[11px] text-noir/45 mt-0.5">Toucher & aspect sur demande</p>' +
+            '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+  updateMoodboardButton();
+  refreshIcons();
+}
+
+function updateMoodboardButton(){
+  const btn = $('#moodboard-validate');
+  const ok  = !!state.validated[state.moodRoom];
+  if (ok){
+    btn.className = 'mt-7 w-full h-14 rounded-2xl bg-green-600 text-white text-[13px] font-medium tracking-[0.24em] uppercase inline-flex items-center justify-center gap-3 transition-all duration-300 active:scale-[0.98] shadow-luxe';
+    btn.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i><span>✅ Moodboard Validé</span>';
+    $('#moodboard-hint').textContent = 'Ce moodboard a été validé et transmis à Sofia, votre architecte.';
+  } else {
+    btn.className = 'mt-7 w-full h-14 rounded-2xl bg-noir-900 text-creme-light text-[13px] font-medium tracking-[0.24em] uppercase inline-flex items-center justify-center gap-3 hover:bg-noir-700 transition-all duration-300 active:scale-[0.98] shadow-luxe';
+    btn.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i><span>Valider ce moodboard</span>';
+    $('#moodboard-hint').textContent = "Votre validation sera transmise à Sofia, votre architecte d'intérieur.";
+  }
+  refreshIcons();
+}
+
+function validateMoodboard(){
+  const room = state.moodRoom;
+  state.validated[room] = !state.validated[room];
+  updateMoodboardButton();
+  toast(state.validated[room]
+    ? 'Moodboard « ' + ROOM_NAMES[room] + ' » validé — Sofia est notifiée'
+    : 'Validation du moodboard « ' + ROOM_NAMES[room] + ' » annulée', state.validated[room] ? 'check' : 'rotate-ccw');
+}
+
+/* ═══════════════ RENDUS 3D & COMMENTAIRES ═══════════════ */
+function filterRenders(room){
+  state.renderRoom = room;
+  state.renderIndex = 0;
+  setActivePill('render-filters', 'room', room);
+  renderRenders();
+}
+
+function renderRenders(){
+  const list = RENDERS[state.renderRoom];
+  const idx  = Math.min(state.renderIndex, list.length - 1);
+  state.renderIndex = idx;
+  const r = list[idx];
+  $('#render-main').src = r.src;
+  $('#render-title').textContent = r.title;
+  $('#render-badge').textContent = ROOM_NAMES[state.renderRoom] + ' · Rendu HD';
+  $('#render-count').textContent = (idx + 1) + ' / ' + list.length;
+  $('#render-thumbs').innerHTML = list.map(function(t, i){
+    const on = (i === idx);
+    return '<button onclick="selectRender(' + i + ')" aria-label="Rendu ' + (i + 1) + '" class="shrink-0 rounded-2xl overflow-hidden border-2 transition ' +
+      (on ? 'border-or' : 'border-transparent opacity-55 hover:opacity-100') + '">' +
+      '<img src="' + t.src + '" alt="" class="w-24 h-16 sm:w-28 sm:h-[72px] object-cover" onerror="imgFallback(this)"></button>';
+  }).join('');
+  renderComments();
+  refreshIcons();
+}
+
+function stepRender(dir){
+  const list = RENDERS[state.renderRoom];
+  state.renderIndex = (state.renderIndex + dir + list.length) % list.length;
+  renderRenders();
+}
+function selectRender(i){ state.renderIndex = i; renderRenders(); }
+
+function commentHTML(c){
+  const avatar = c.me
+    ? '<img src="' + AVATARS.sarah + '" alt="" class="w-9 h-9 rounded-full object-cover border border-or/40" onerror="imgFallback(this)">'
+    : '<div class="w-9 h-9 rounded-full bg-noir-900 grid place-items-center shrink-0 overflow-hidden"><img src="' + LOGO_SRC + '" alt="" class="w-[26px] h-[26px] object-contain" onerror="logoFallback(this)"></div>';
+  return '<div class="flex gap-3.5">' +
+    '<div class="shrink-0">' + avatar + '</div>' +
+    '<div class="min-w-0 flex-1">' +
+      '<div class="flex flex-wrap items-baseline gap-x-2.5">' +
+        '<p class="text-[13px] font-medium text-noir-900">' + esc(c.author) + '</p>' +
+        '<p class="text-[11px] text-noir/40">' + esc(c.time) + '</p>' +
+      '</div>' +
+      '<div class="mt-1.5 rounded-2xl rounded-tl-md ' + (c.me ? 'bg-or/15' : 'bg-creme') + ' px-4 py-3">' +
+        '<p class="text-[13px] text-noir/80 leading-relaxed">' + esc(c.text) + '</p>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderComments(){
+  const list = RENDER_COMMENTS[state.renderRoom];
+  const box = $('#comments-list');
+  box.innerHTML = (list.length === 0)
+    ? '<p class="text-[13px] text-noir/40 text-center py-8 tracking-[0.06em]">Soyez la première personne à commenter ce rendu.</p>'
+    : list.map(commentHTML).join('');
+  $('#comment-count').textContent = list.length;
+  box.scrollTop = box.scrollHeight;
+  refreshIcons();
+}
+
+function addComment(){
+  const input = $('#comment-input');
+  const text = input.value.trim();
+  if (!text){ input.focus(); return; }
+  const isAdmin = (state.role === 'admin');
+  RENDER_COMMENTS[state.renderRoom].push({
+    author: isAdmin ? 'Sofia Bennani' : 'Sarah Benali',
+    role: isAdmin ? 'Architecte — SB Interiors' : 'Cliente',
+    me: !isAdmin,
+    time: "À l'instant",
+    text: text
+  });
+  input.value = '';
+  renderComments();
+  toast('Commentaire publié', 'message-circle');
+}
+
+/* ═══════════════ VISITE VIRTUELLE 360° ═══════════════ */
+function filterTour(zone){
+  state.zone = zone;
+  setActivePill('tour-filters', 'zone', zone);
+  renderTour();
+}
+
+function renderTour(){
+  const z = TOUR[state.zone];
+  $('#tour-main').src = z.src;
+  $('#tour-zone').textContent = z.zone;
+  $('#tour-title').textContent = z.title;
+  $('#tour-thumbs').innerHTML = Object.keys(TOUR).map(function(key){
+    const t = TOUR[key];
+    const on = (key === state.zone);
+    return '<button onclick="filterTour(\'' + key + '\')" class="relative rounded-2xl overflow-hidden border-2 transition ' +
+      (on ? 'border-or' : 'border-transparent opacity-55 hover:opacity-100') + '">' +
+      '<img src="' + t.src + '" alt="' + t.short + '" class="w-full h-16 sm:h-20 object-cover" onerror="imgFallback(this)">' +
+      '<span class="absolute inset-x-0 bottom-0 bg-noir-950/60 text-creme-light text-[9px] tracking-[0.14em] uppercase text-center py-1">' + t.short + '</span>' +
+    '</button>';
+  }).join('');
+  refreshIcons();
+}
+
+function open360(){
+  const z = TOUR[state.zone];
+  $('#modal-360-img').src = z.src;
+  $('#modal-360-zone').textContent = z.zone;
+  $('#modal-360-title').textContent = z.title;
+  $('#modal-360').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  refreshIcons();
+}
+function close360(){
+  $('#modal-360').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+/* ═══════════════ PLANS 2D/3D ═══════════════ */
+const FLOORS = {
+  rdc:       { label:'Rez-de-chaussée', sub:'Surface habitable · 210 m² · Échelle 1:100' },
+  etage:     { label:'Étage',           sub:'Surface habitable · 96 m² · Balcon 12 m²' },
+  exterieur: { label:'Extérieur',       sub:'Terrain · 1 200 m² · Piscine 12 × 5 m' }
+};
+
+function setFloor(f){
+  state.floor = f;
+  ['rdc','etage','exterieur'].forEach(function(k){
+    $('#plan-' + k).classList.toggle('hidden', k !== f);
+  });
+  setActivePill('floor-tabs', 'floor', f);
+  $('#plan-floor-label').textContent = FLOORS[f].label;
+  $('#plan-floor-sub').textContent = FLOORS[f].sub;
+  refreshIcons();
+}
+
+function zoomPlan(d){
+  state.zoom = (d === 0) ? 1 : Math.min(3, Math.max(0.6, state.zoom + d));
+  applyZoom();
+}
+
+function applyZoom(){
+  $('#plan-canvas').style.width = (state.zoom * 100) + '%';
+  $('#plan-zoom-val').textContent = Math.round(state.zoom * 100) + '%';
+}
+
+/* ═══════════════ SUIVI DE CHANTIER ═══════════════ */
+function renderSteps(){
+  const el = $('#steps-timeline');
+  el.innerHTML = STEPS.map(function(s, i){
+    const meta = STATUS_META[s.status];
+    const last = (i === STEPS.length - 1);
+    const line = last ? '' : '<span class="absolute left-[19px] top-11 bottom-0 w-[2px] ' + meta.line + '"></span>';
+    const badge = state.adminMode
+      ? '<button onclick="cycleStep(' + i + ')" class="rounded-full ' + meta.badge + ' text-[10px] tracking-[0.16em] uppercase px-3 py-1 cursor-pointer hover:ring-2 hover:ring-or/40 transition">' + meta.label + '</button>'
+      : '<span class="rounded-full ' + meta.badge + ' text-[10px] tracking-[0.16em] uppercase px-3 py-1">' + meta.label + '</span>';
+    return '<div class="relative flex gap-5 ' + (last ? '' : 'pb-7') + '">' +
+      line +
+      '<span class="relative z-10 shrink-0 w-10 h-10 rounded-full ' + meta.dot + ' grid place-items-center shadow-soft">' +
+        '<i data-lucide="' + meta.icon + '" class="w-[18px] h-[18px]"></i>' +
+      '</span>' +
+      '<div class="flex-1 min-w-0 pt-0.5">' +
+        '<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">' +
+          '<p class="text-[15px] font-medium text-noir-900">' + esc(s.name) + '</p>' + badge +
+        '</div>' +
+        '<p class="text-[12px] text-noir/45 mt-1 tracking-[0.04em]">' + esc(s.dates) + '</p>' +
+        '<p class="text-[12px] text-noir/55 mt-0.5">' + esc(s.desc) + '</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  /* Chips d'administration (panneau de contrôle) */
+  const adminBox = $('#admin-steps');
+  if (adminBox){
+    adminBox.innerHTML = STEPS.map(function(s, i){
+      const meta = STATUS_META[s.status];
+      return '<button onclick="cycleStep(' + i + ')" class="inline-flex items-center gap-2 rounded-full ' + meta.badge + ' text-[11px] tracking-[0.1em] px-3.5 py-2 hover:ring-2 hover:ring-or/50 transition">' +
+        '<span>' + esc(s.name) + '</span><span class="opacity-50">·</span>' +
+        '<span class="uppercase tracking-[0.14em] text-[10px]">' + meta.label + '</span>' +
+      '</button>';
+    }).join('');
+  }
+  updatePhasesStat();
+  refreshIcons();
+}
+
+function setChantierTab(tab){
+  state.chantierTab = tab;
+  ['photos','videos','comments'].forEach(function(k){
+    $('#chantier-' + (k === 'comments' ? 'comments' : k)).classList.toggle('hidden', k !== tab);
+  });
+  const labels = { photos:'#chantier-tab-photos', videos:'#chantier-tab-videos', comments:'#chantier-tab-comments' };
+  Object.keys(labels).forEach(function(k){
+    const btn = $(labels[k]);
+    const on = (k === tab);
+    btn.setAttribute('class', 'pill rounded-2xl px-4 sm:px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase ' +
+      (on ? 'bg-noir-900 text-creme-light' : 'bg-white text-noir/60 border border-noir/10 hover:border-or/60 transition'));
+  });
+  refreshIcons();
+}
+
+function renderChantierComments(){
+  const box = $('#chantier-comments-list');
+  box.innerHTML = CHANTIER_COMMENTS.map(commentHTML).join('');
+  box.scrollTop = box.scrollHeight;
+  refreshIcons();
+}
+
+function addChantierComment(){
+  const input = $('#chantier-comment-input');
+  const text = input.value.trim();
+  if (!text){ input.focus(); return; }
+  const isAdmin = (state.role === 'admin');
+  CHANTIER_COMMENTS.push({
+    author: isAdmin ? 'Sofia Bennani (Admin)' : 'Sarah Benali',
+    role: isAdmin ? 'Architecte — SB Interiors' : 'Cliente',
+    me: !isAdmin,
+    time: "À l'instant",
+    text: text
+  });
+  input.value = '';
+  renderChantierComments();
+  toast('Message envoyé à l\u2019équipe chantier', 'message-circle');
+}
+
+function openUpdateModal(){
+  $('#modal-update').classList.remove('hidden');
+  refreshIcons();
+}
+function closeUpdateModal(){
+  $('#modal-update').classList.add('hidden');
+  $('#update-text').value = '';
+}
+
+function publishUpdate(){
+  const txt = $('#update-text').value.trim();
+  if (!txt){ toast('Veuillez rédiger un message avant de publier', 'alert-circle'); return; }
+  CHANTIER_COMMENTS.push({ author:'Sofia Bennani (Admin)', role:'Architecte — SB Interiors', me:false, time:"À l'instant", text: txt });
+  closeUpdateModal();
+  renderChantierComments();
+  setChantierTab('comments');
+  showView('chantier');
+  toast('Mise à jour publiée — visible côté client', 'check');
+}
+
+/* ═══════════════ DOCUMENTS & MÉDIAS ═══════════════ */
+function renderFolders(){
+  $('#folders-list').innerHTML = DOCS.map(function(f, i){
+    const open = (state.openFolder === i);
+    const files = open
+      ? '<div class="border-t border-noir/5 divide-y divide-noir/5 bg-creme/30">' + f.files.map(function(file){
+          const isVideo = /\.mp4$/.test(file.n);
+          const badge = isVideo
+            ? '<span class="shrink-0 w-8 h-8 rounded-lg bg-noir-900/5 text-noir-900 grid place-items-center"><i data-lucide="video" class="w-4 h-4"></i></span>'
+            : '<span class="shrink-0 w-8 h-8 rounded-lg bg-red-600/10 text-red-600 grid place-items-center text-[9px] font-bold">PDF</span>';
+          return '<div class="flex items-center gap-3.5 px-5 sm:px-6 py-3.5">' + badge +
+            '<div class="min-w-0 flex-1"><p class="text-[13px] text-noir-900 truncate">' + esc(file.n) + '</p>' +
+            '<p class="text-[10px] text-noir/40 tracking-[0.06em]">' + file.s + '</p></div>' +
+            '<button onclick="downloadFile(\'' + esc(file.n) + '\')" aria-label="Télécharger" class="shrink-0 w-9 h-9 rounded-xl border border-noir/10 text-noir/50 grid place-items-center hover:border-or/60 hover:text-or-dark transition active:scale-90"><i data-lucide="download" class="w-4 h-4"></i></button>' +
+          '</div>';
+        }).join('') + '</div>'
+      : '';
+    return '<div class="card-luxe overflow-hidden">' +
+      '<button onclick="toggleFolder(' + i + ')" class="w-full flex items-center gap-4 px-5 sm:px-6 py-4 text-left hover:bg-creme/40 transition">' +
+        '<span class="shrink-0 w-11 h-11 rounded-2xl bg-or/15 text-or-dark grid place-items-center"><i data-lucide="' + f.icon + '" class="w-5 h-5"></i></span>' +
+        '<div class="flex-1 min-w-0">' +
+          '<p class="text-[15px] font-medium text-noir-900 truncate">' + esc(f.name) + '</p>' +
+          '<p class="text-[11px] text-noir/45 tracking-[0.06em]">' + f.files.length + ' fichiers</p>' +
+        '</div>' +
+        '<i data-lucide="chevron-down" class="w-5 h-5 text-noir/30 transition-transform ' + (open ? 'rotate-180' : '') + '"></i>' +
+      '</button>' + files +
+    '</div>';
+  }).join('');
+  refreshIcons();
+}
+
+function toggleFolder(i){
+  state.openFolder = (state.openFolder === i) ? -1 : i;
+  renderFolders();
+}
+
+/* ═══════════════ MESSAGERIE ═══════════════ */
+function renderThreads(){
+  $('#threads-list').innerHTML = Object.keys(THREADS).map(function(key){
+    const t = THREADS[key];
+    const last = t.messages[t.messages.length - 1];
+    const lastText = last.typing ? '…' : last.text;
+    return '<button onclick="openThread(\'' + key + '\')" class="w-full flex items-center gap-3.5 px-5 py-4 text-left hover:bg-creme/50 transition ' + (state.thread === key ? 'bg-creme/70' : '') + '">' +
+      '<img src="' + t.avatar + '" alt="" class="w-11 h-11 rounded-full ' + avatarCls(t.avatar) + ' border border-or/40 shrink-0" onerror="imgFallback(this)">' +
+      '<div class="min-w-0 flex-1">' +
+        '<div class="flex items-baseline justify-between gap-2">' +
+          '<p class="text-[14px] font-medium text-noir-900 truncate">' + esc(t.name) + '</p>' +
+          '<span class="text-[10px] text-noir/35 shrink-0">' + esc(last.time) + '</span>' +
+        '</div>' +
+        '<p class="text-[12px] text-noir/45 truncate mt-0.5">' + esc(lastText) + '</p>' +
+      '</div>' +
+      (t.unread ? '<span class="w-2.5 h-2.5 rounded-full bg-or shrink-0"></span>' : '') +
+    '</button>';
+  }).join('');
+}
+
+function openThread(key){
+  state.thread = key;
+  state.chatOpen = true;
+  const t = THREADS[key];
+  t.unread = 0;
+  $('#chat-name').textContent = t.name;
+  $('#chat-avatar').src = t.avatar;
+  $('#chat-avatar').className = 'w-10 h-10 rounded-full border border-or/40 ' + avatarCls(t.avatar);
+  $('#chat-status').innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>' + esc(t.status);
+  renderThreads();
+  renderChat();
+  /* Sur mobile : basculer vers le fil de discussion */
+  $('#pane-list').classList.add('max-lg:hidden');
+  const chat = $('#pane-chat');
+  chat.classList.remove('hidden');
+  chat.classList.add('flex');
+  const dot = $('#bnav-msg-dot'); if (dot) dot.classList.add('hidden');
+  const sdot = $('#sidebar-msg-dot'); if (sdot) sdot.classList.add('hidden');
+  refreshIcons();
+}
+
+function closeChat(){
+  state.chatOpen = false;
+  $('#pane-chat').classList.add('hidden');
+  $('#pane-chat').classList.remove('flex');
+  $('#pane-list').classList.remove('max-lg:hidden');
+}
+
+function renderChat(){
+  const t = THREADS[state.thread];
+  $('#chat-messages').innerHTML = t.messages.map(function(m){
+    if (m.typing){
+      return '<div class="flex gap-2.5 items-center text-noir/40 px-1"><span class="typing"><span></span><span></span><span></span></span>' +
+        '<span class="text-[11px] tracking-[0.06em]">' + esc(m.typing) + '</span></div>';
+    }
+    if (m.from === 'me'){
+      return '<div class="flex justify-end"><div class="max-w-[80%] rounded-2xl rounded-br-md bg-noir-900 text-creme-light px-4 py-3">' +
+        '<p class="text-[13px] leading-relaxed">' + esc(m.text) + '</p>' +
+        '<p class="text-[10px] text-creme/40 mt-1 text-right">' + esc(m.time) + '</p></div></div>';
+    }
+    return '<div class="flex gap-3">' +
+      '<img src="' + t.avatar + '" alt="" class="w-8 h-8 rounded-full ' + avatarCls(t.avatar) + ' border border-or/40 shrink-0 mt-0.5" onerror="imgFallback(this)">' +
+      '<div class="max-w-[80%] rounded-2xl rounded-tl-md bg-white border border-noir/10 px-4 py-3">' +
+        '<p class="text-[13px] text-noir/85 leading-relaxed">' + esc(m.text) + '</p>' +
+        '<p class="text-[10px] text-noir/35 mt-1">' + esc(m.time) + '</p></div></div>';
+  }).join('');
+  const box = $('#chat-messages');
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendChat(){
+  const input = $('#chat-input');
+  const text = input.value.trim();
+  if (!text){ input.focus(); return; }
+  const t = THREADS[state.thread];
+  t.messages.push({ from:'me', text: text, time: "À l'instant" });
+  input.value = '';
+  renderChat();
+  /* Indicateur "en train d'écrire" + réponse simulée */
+  t.messages.push({ typing: t.name.split(' ')[0] + ' est en train d\u2019écrire…' });
+  renderChat();
+  clearTimeout(state.replyTimer);
+  state.replyTimer = setTimeout(function(){
+    t.messages = t.messages.filter(function(m){ return !m.typing; });
+    t.messages.push({ from:'them', text: t.replies[t.replyIdx % t.replies.length], time: "À l'instant" });
+    t.replyIdx++;
+    if (state.view === 'messages') renderChat();
+  }, 1600);
+}
+
+/* ═══════════════ INITIALISATION ═══════════════ */
+function init(){
+  renderMoodboard();
+  renderRenders();
+  renderTour();
+  renderSteps();
+  renderChantierComments();
+  renderFolders();
+  renderThreads();
+  renderChat();
+  updateProgressUI();
+  applyZoom();
+  refreshIcons();
+
+  $('#login-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    login('client');
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ close360(); closeUpdateModal(); }
+  });
+
+  /* Carousel rendus : navigation au clavier */
+  document.addEventListener('keydown', function(e){
+    if (state.view !== 'rendus') return;
+    if (e.key === 'ArrowLeft')  stepRender(-1);
+    if (e.key === 'ArrowRight') stepRender(1);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
